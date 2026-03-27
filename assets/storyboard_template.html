@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MadStory 分镜预览卡片</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --text: #1e293b;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .content {
+            padding: 1.5rem;
+        }
+        .section {
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.25rem;
+        }
+        .prompt-box {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            border-left: 4px solid var(--primary);
+        }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .meta-item {
+            background: #f8fafc;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+        .meta-label {
+            color: #94a3b8;
+            margin-bottom: 0.25rem;
+        }
+        .footer {
+            background: #f8fafc;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <span>🎬 MadStory 分镜方案</span>
+            <span style="font-size: 0.8rem; opacity: 0.8;">Seedance 2.0 Ready</span>
+        </div>
+        <div class="content">
+            <div class="section">
+                <div class="section-title">核心分镜提示词 (Standard Prompt)</div>
+                <div class="prompt-box" id="prompt-content">
+                    {{STANDARD_PROMPT}}
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">镜头与多模态参数</div>
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">镜头运动 (Camera)</div>
+                        <div id="camera-movement">{{CAMERA_MOVEMENT}}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">动态强度 (Motion)</div>
+                        <div id="motion-strength">{{MOTION_STRENGTH}}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">参考图像 (Image Ref)</div>
+                        <div id="image-ref">{{IMAGE_REF_ADVICE}}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">氛围建议 (Vibe)</div>
+                        <div id="vibe-advice">{{VIBE_ADVICE}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">声音设计建议 (Sound Design)</div>
+                <div id="sound-design" style="font-size: 0.9rem;">
+                    {{SOUND_DESIGN}}
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            Powered by MadStory Skill | Optimized for Seedance 2.0
+        </div>
+    </div>
+</body>
+</html>

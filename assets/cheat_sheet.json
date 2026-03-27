@@ -1,0 +1,37 @@
+{
+  "seedance_2.0_quick_params": {
+    "motion_strength": {
+      "low": 2,
+      "standard": 5,
+      "high": 8,
+      "extreme": 10
+    },
+    "cfg_scale": {
+      "realistic": 7,
+      "stylized": 12,
+      "creative": 15
+    },
+    "sampling_steps": {
+      "fast": 20,
+      "high_quality": 35
+    }
+  },
+  "camera_language_presets": {
+    "dynamic_chase": "Low angle, dolly follow shot, high motion strength (8), 24mm wide lens",
+    "emotional_close_up": "Eye-level, slow push-in, 85mm portrait lens, shallow depth of field",
+    "grand_reveal": "High angle to low angle crane shot, 16mm ultra-wide, slow rotation",
+    "mystery_reveal": "Dutch angle, slow pan left, high contrast lighting, 35mm lens"
+  },
+  "lighting_atmosphere_presets": {
+    "golden_hour": "Warm orange sunlight, long shadows, lens flare, cinematic backlighting",
+    "cyberpunk": "Neon blue and magenta lights, rainy street, wet reflections, high saturation",
+    "noir": "High contrast black and white, dramatic shadows, moody lighting, smoke",
+    "dreamy": "Soft focus, pastel colors, hazy atmosphere, glowing highlights"
+  },
+  "sound_design_presets": {
+    "action": "Fast-paced orchestral, heavy bass, synchronization with character hits",
+    "suspense": "Low drone, heartbeat sound effect, sudden silence for tension",
+    "nature": "Bird chirping, wind rustling leaves, gentle stream background",
+    "sci-fi": "Electronic hum, robotic sounds, atmospheric synth pads"
+  }
+}
