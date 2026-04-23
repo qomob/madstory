@@ -56,5 +56,11 @@ mad-story/
 
 本项目采用 [MIT License](LICENSE) 开源协议。
 
+## 加入群聊
+
+<div align="center">
+  <img src="https://qomob.ai/xskill.jpg" width="500" alt="XSkill">
+</div>
+
 ---
 Created with ❤️ by **[qomob.ai](https://qomob.ai)** | [Install on ClawHub](https://clawhub.ai/qomob/mad-story)
