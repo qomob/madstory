@@ -1,0 +1,71 @@
+{
+  "seedance_2.0_quick_params": {
+    "motion_strength": {"ecommerce": 2, "ugc": 3, "cinematic": 5, "multi_shot": 4, "low": 2, "standard": 5, "high": 8, "extreme": 10},
+    "cfg_scale": {"realistic": 7, "stylized": 12, "creative": 15},
+    "sampling_steps": {"fast": 20, "high_quality": 35},
+    "duration": {"default": 15, "max_per_generation": 15, "pdp_loop": 10}
+  },
+  "ad_modes": {
+    "creative_film": {
+      "label": "电影创意探索", "default_seedance_mode": "text-to-video", "motion_strength": 4,
+      "negative_prompt": "no generic composition, no cliché visual language, no random style mixing, no emotional disconnect, no flat narrative, no derivative imagery",
+      "camera_rule": "one motivated camera move per shot, cinematic language required",
+      "lighting_rule": "deliberate lighting logic with emotional motivation for each light source",
+      "quality_gates": ["emotional_direction_present", "anti_cliche_constraints", "creative_uniqueness"],
+      "harness_workflow": "generate_and_filter_tournament"
+    },
+    "ecommerce": {
+      "label": "电商产品", "default_seedance_mode": "image-to-video", "motion_strength": 2,
+      "negative_prompt": "no logo distortion, no text artifacts, no packaging collapse, no duplicate product, no label blur, no warped glass, no cap drift",
+      "camera_rule": "single slow movement, product must stay center-frame",
+      "product_dominance_min": 0.4, "lighting_rule": "light source must not obscure product labels or text",
+      "quality_gates": ["label_readable", "product_geometry_preserved", "single_camera_move"]
+    },
+    "ugc": {
+      "label": "UGC 原生广告", "default_seedance_mode": "reference-to-video", "motion_strength": 3,
+      "negative_prompt": "no extra fingers, no face drift, no lip mismatch, no background warping, no product disappearance, no shaky framing, no eye drift",
+      "camera_rule": "slight handheld feel, maintain social-native pacing",
+      "performance_rule": "one creator, one message beat, one simple gesture",
+      "quality_gates": ["face_identity_consistent", "product_visible", "hands_stable"]
+    },
+    "cinematic": {
+      "label": "电影感品牌短片", "default_seedance_mode": "text-to-video", "motion_strength": 5,
+      "negative_prompt": "no shaky camera, no object melting, no random text, no muddy lighting, no flat blacks, no text watermark",
+      "camera_rule": "one motivated camera move per shot, no mixed movements",
+      "lighting_rule": "deliberate lighting logic with controlled contrast",
+      "quality_gates": ["single_camera_move", "lighting_intentional", "emotional_focus"]
+    },
+    "multi_shot": {
+      "label": "多镜头叙事", "default_seedance_mode": "reference-to-video", "motion_strength": 4,
+      "negative_prompt": "no character drift between cuts, no scene inconsistency, no transition artifacts, no text watermark",
+      "max_shots_per_generation": 3, "transition_keywords": ["Cut to", "Camera cut to", "Shot Switch"],
+      "quality_gates": ["shot_count_under_3", "character_consistency", "scene_continuity"]
+    },
+    "one_shot": {
+      "label": "一镜到底", "default_seedance_mode": "image-to-video", "motion_strength": 4,
+      "negative_prompt": "no abrupt cuts, no spatial discontinuity, no object mutation between frames, no stutter in transitions, no frame-tearing",
+      "camera_rule": "continuous spatial flow, no hard cuts", "min_images": 2, "max_images": 10,
+      "quality_gates": ["image_count_in_range", "spatial_continuity", "transition_naturalness"]
+    },
+    "viral_replicate": {
+      "label": "爆款复刻", "default_seedance_mode": "reference-to-video", "motion_strength": 5,
+      "negative_prompt": "no style drift from reference, no subject identity loss, no mismatched pacing, no warped replacement subject, no original ghosting",
+      "camera_rule": "replicate reference video camera style and pacing",
+      "replication_strategies": ["creative_shoot", "classic_remake", "viral_deconstruct"],
+      "quality_gates": ["style_fidelity", "subject_replacement_naturalness", "pacing_match"]
+    },
+    "agent_mode": {
+      "label": "Agent 模式", "default_seedance_mode": "text-to-video", "motion_strength": 4,
+      "negative_prompt": "no text watermark, no shaky camera, no object melting, no style inconsistency",
+      "camera_rule": "agent auto-selects camera style based on intent", "auto_route": true,
+      "quality_gates": ["intent_parsing_accurate", "style_consistency", "output_completeness"]
+    },
+    "short_drama": {
+      "label": "短剧创作", "default_seedance_mode": "reference-to-video", "motion_strength": 4,
+      "negative_prompt": "no character face drift across episodes, no costume inconsistency, no scene discontinuity, no voice mismatch, no subtitle desync",
+      "camera_rule": "per-episode camera style preserved", "max_episodes_per_batch": 10,
+      "script_markers": {"episode": "第X集", "scene": "场景:", "characters": "人物:", "action": "△", "voiceover": "(OS)"},
+      "quality_gates": ["character_cross_episode_consistency", "script_format_valid", "narration_naturalness"]
+    }
+  }
+}

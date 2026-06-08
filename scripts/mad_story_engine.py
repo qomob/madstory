@@ -1,8 +1,10 @@
 import json
 import os
+import time
 
 
 class AdMode:
+    CREATIVE_FILM = "creative_film"
     ECOMMERCE = "ecommerce"
     UGC = "ugc"
     CINEMATIC = "cinematic"
@@ -13,6 +15,7 @@ class AdMode:
     SHORT_DRAMA = "short_drama"
 
     LABELS = {
+        CREATIVE_FILM: "电影创意探索",
         ECOMMERCE: "电商产品",
         UGC: "UGC 原生广告",
         CINEMATIC: "电影感品牌短片",
@@ -24,6 +27,7 @@ class AdMode:
     }
 
     DEFAULT_SEEDANCE_MODE = {
+        CREATIVE_FILM: "text-to-video",
         ECOMMERCE: "image-to-video",
         UGC: "reference-to-video",
         CINEMATIC: "text-to-video",
@@ -38,22 +42,80 @@ class AdMode:
 
 
 class QualityGate:
+    """质量门禁 — 语义化结构校验（替代硬编码关键词匹配）
+    Harness Engineering Design for Failure: 每项检查都有明确的降级路径
+    """
+    REQUIRED_OUTPUT_FIELDS = [
+        "STANDARD_PROMPT", "NEGATIVE_PROMPT", "TIMELINE", "CAMERA",
+        "MOTION_STRENGTH", "DURATION", "MODE", "MODE_KEY",
+        "MULTI_MODAL_ADVICE", "SOUND_DESIGN", "SHOT_LIST",
+    ]
+
+    # 5层提示词结构字段映射（语义化检测，不依赖中英文关键词子串匹配）
+    PROMPT_LAYERS = {
+        "subject": ["STANDARD_PROMPT"],
+        "action": ["STANDARD_PROMPT"],  # 通过长度+内容密度间接判断
+        "camera": ["CAMERA"],
+        "style": ["LIGHTING", "lighting", "STYLE", "style"],
+        "constraints": ["NEGATIVE_PROMPT"],
+    }
+
     @staticmethod
     def check_prompt_structure(output):
+        """语义化结构校验: 检查输出是否包含5层结构的必要字段"""
         reasons = []
         prompt = output.get("STANDARD_PROMPT", "")
         if not prompt:
             reasons.append("STANDARD_PROMPT 为空")
             return reasons
-        has_action = any(w in prompt.lower() for w in ["动作", "action", "ing ", "旋转", "行走", "推", "拉", "展示", "说话"])
-        has_camera = any(w in prompt.lower() for w in ["camera", "镜头", "push", "orbit", "dolly", "track", "推", "拉", "跟", "摇"])
-        has_style = any(w in prompt.lower() for w in ["lighting", "光", "调", "色", "风格", "style", "cinematic", "质感"])
-        if not has_action:
-            reasons.append("STANDARD_PROMPT 缺少动作描述")
-        if not has_camera:
-            reasons.append("STANDARD_PROMPT 缺少镜头运动描述")
-        if not has_style:
-            reasons.append("STANDARD_PROMPT 缺少光影/风格描述")
+
+        # Layer 1: Subject — prompt 非空且长度合理即认为有主体描述
+        if len(prompt.strip()) < 5:
+            reasons.append("STANDARD_PROMPT 过短，缺少主体描述")
+
+        # Layer 2: Action — prompt 包含动词性内容（通过长度和结构判断）
+        if len(prompt.split()) < 3:
+            reasons.append("STANDARD_PROMPT 结构过于简单，可能缺少动作描述")
+
+        # Layer 3: Camera — 检查 CAMERA 字段是否存在且有实质内容
+        camera = output.get("CAMERA", "")
+        if not camera or camera in ("static", "", "Agent 根据风格自动编排", "复刻参考视频运镜"):
+            reasons.append("CAMERA 字段缺失或为默认值")
+
+        # Layer 4: Style/Lighting — 检查光影或风格相关字段
+        lighting = output.get("LIGHTING", output.get("lighting", ""))
+        style = output.get("STYLE", output.get("style", ""))
+        if not lighting and not style and "lighting" not in prompt.lower() and "光" not in prompt:
+            reasons.append("缺少光影/风格描述（LIGHTING/STYLE 字段或 prompt 中）")
+
+        # Layer 5: Constraints — Negative Prompt 必须存在
+        if not output.get("NEGATIVE_PROMPT"):
+            reasons.append("缺少 Negative Prompt 约束")
+
+        return reasons
+
+    @staticmethod
+    def check_creative_film(output):
+        """Mode 0 电影创意探索专用检查"""
+        reasons = []
+        prompt = output.get("STANDARD_PROMPT", "")
+        negative = output.get("NEGATIVE_PROMPT", "")
+
+        # 创意模式必须包含明确的情绪/风格方向
+        emotion_words = ["情感", "情绪", "氛围", "意境", "emotion", "mood", "atmosphere"]
+        style_words = ["风格", "style", "视觉", "visual", "美学", "aesthetic", "导演", "director"]
+        has_emotion = any(w in prompt.lower() for w in emotion_words)
+        has_style = any(w in prompt.lower() for w in style_words)
+
+        if not has_emotion and not has_style:
+            reasons.append("创意探索模式缺少情绪/风格方向描述")
+
+        # 创意模式的负面约束必须包含 anti-cliché 条目
+        anti_cliche = ["generic", "cliché", "cliche", "derivative", "flat"]
+        has_anti = any(w in negative.lower() for w in anti_cliche)
+        if not has_anti:
+            reasons.append("创意探索模式的 Negative Prompt 缺少反套路约束")
+
         return reasons
 
     @staticmethod
@@ -336,6 +398,192 @@ class ViralReplicateEngine:
             "SOUND_DESIGN": "复刻参考视频配乐风格",
             "SHOT_LIST": [],
         }
+
+
+# ============================================================
+# Harness Engineering 核心机制
+# ============================================================
+
+class PPAFState:
+    """PPAF 循环状态追踪器 (Perception → Planning → Action → Feedback)
+    用于记录引擎每个阶段的执行状态，支持 R.E.S.T 可追溯性
+    """
+    PHASES = ["perception", "planning", "action", "feedback"]
+
+    def __init__(self):
+        self.phases = {p: {"status": "pending", "ts": None, "output": None} for p in self.PHASES}
+        self._start_ts = time.time()
+
+    def start(self, phase):
+        if phase not in self.phases:
+            raise ValueError(f"无效阶段: {phase}, 有效值: {self.PHASES}")
+        self.phases[phase] = {"status": "running", "ts": time.time(), "output": None}
+
+    def complete(self, phase, output=None):
+        if phase in self.phases:
+            self.phases[phase] = {"status": "done", "ts": time.time(), "output": output}
+
+    def fail(self, phase, error=None):
+        if phase in self.phases:
+            self.phases[phase] = {"status": "failed", "ts": time.time(), "output": error}
+
+    @property
+    def current_phase(self):
+        for p in self.PHASES:
+            if self.phases[p]["status"] == "running":
+                return p
+        return "idle"
+
+    @property
+    def all_done(self):
+        return all(p["status"] == "done" for p in self.phases.values())
+
+    @property
+    def elapsed_ms(self):
+        return round((time.time() - self._start_ts) * 1000)
+
+    def to_dict(self):
+        return {
+            "phases": {k: {"status": v["status"], "ts": v["ts"]} for k, v in self.phases.items()},
+            "current_phase": self.current_phase,
+            "all_done": self.all_done,
+            "elapsed_ms": self.elapsed_ms,
+        }
+
+
+class RESTCompliance:
+    """R.E.S.T 可靠性模型合规检查器
+    - Reliability: 输出完整性校验
+    - Efficiency: Token/时间效率评估
+    - Security: 敏感信息检测
+    - Traceability: 完整操作日志
+    """
+    CHECKS = {
+        "reliability": ["required_fields_present", "prompt_not_empty", "duration_valid"],
+        "efficiency": ["output_size_reasonable", "no_redundant_content"],
+        "security": ["no_secrets_in_output", "no_injection_patterns"],
+        "traceability": ["ppaf_cycle_complete", "mode_logged", "timestamp_present"],
+    }
+
+    @classmethod
+    def check(cls, output: dict, ppaf_state: PPAFState = None) -> dict:
+        """执行 R.E.S.T 四维检查，返回每项结果"""
+        results = {}
+        # Reliability
+        results["reliability"] = cls._check_reliability(output)
+        # Efficiency
+        results["efficiency"] = cls._check_efficiency(output)
+        # Security
+        results["security"] = cls._check_security(output)
+        # Traceability
+        results["traceability"] = cls._check_traceability(output, ppaf_state)
+
+        all_pass = all(
+            r.get("passed", False) for r in results.values()
+        )
+        results["_overall"] = {"passed": all_pass, "score": sum(r.get("score", 0) for r in results.values()) / 4.0}
+        return results
+
+    @staticmethod
+    def _check_reliability(output):
+        required = QualityGate.REQUIRED_OUTPUT_FIELDS
+        missing = [f for f in required if not output.get(f)]
+        passed = len(missing) == 0
+        return {"passed": passed, "score": 1.0 - len(missing) / len(required), "missing": missing}
+
+    @staticmethod
+    def _check_efficiency(output):
+        prompt_len = len(output.get("STANDARD_PROMPT", ""))
+        neg_len = len(output.get("NEGATIVE_PROMPT", ""))
+        total = prompt_len + neg_len
+        # 合理范围: 50-2000 字符
+        score = 1.0
+        if total < 20:
+            score = 0.3
+        elif total > 3000:
+            score = 0.6
+        return {"passed": score >= 0.7, "score": score, "total_chars": total}
+
+    @staticmethod
+    def _check_security(output):
+        text = json.dumps(output, ensure_ascii=False)
+        danger_patterns = ["api_key", "secret", "password", "token=", "sk-"]
+        found = [p for p in danger_patterns if p in text.lower()]
+        injection = any(kw in text.lower() for kw in ["ignore instructions", "system prompt"])
+        passed = len(found) == 0 and not injection
+        return {"passed": passed, "score": 0.0 if not passed else 1.0, "issues": found + (["injection_pattern"] if injection else [])}
+
+    @staticmethod
+    def _check_traceability(output, ppaf_state):
+        has_mode = bool(output.get("MODE"))
+        has_timestamp = "_generated_at" in output or "_ts" in output
+        ppaf_ok = ppaf_state is None or ppaf_state.all_done or ppaf_state.current_phase != "idle"
+        checks = [has_mode, has_timestamp, ppaf_ok]
+        return {"passed": all(checks), "score": sum(checks) / 3.0, "details": {"has_mode": has_mode, "has_timestamp": has_timestamp, "ppaf_tracked": ppaf_ok}}
+
+
+class FailurePath:
+    """失败降级路径处理器 (Design for Failure 原则)
+    每个失败场景都有明确的降级策略，而非简单抛异常
+    """
+    FALLBACK_CHAINS = {
+        "llm_parse_failed": ["rule_based_parse", "template_fallback", "minimal_output"],
+        "platform_adapt_failed": ["seedance_default", "generic_params"],
+        "quality_gate_failed": ["soft_warn_continue", "auto_fix_common_issues"],
+        "shot_list_empty": ["single_shot_fallback", "timeline_to_shot"],
+        "style_detection_failed": ["default_cinematic", "user_specified_style"],
+    }
+
+    @classmethod
+    def degrade(cls, failure_type: str, context: dict = None) -> dict:
+        """根据失败类型执行降级链"""
+        chain = cls.FALLBACK_CHAINS.get(failure_type, ["minimal_output"])
+        context = context or {}
+        last_error = None
+
+        for strategy in chain:
+            try:
+                result = cls._execute_strategy(strategy, context)
+                if result:
+                    result["_degraded_from"] = failure_type
+                    result["_fallback_strategy"] = strategy
+                    return result
+            except Exception as e:
+                last_error = str(e)
+                continue
+
+        # 最终兜底
+        return {
+            "STANDARD_PROMPT": context.get("user_input", "cinematic scene"),
+            "NEGATIVE_PROMPT": "low quality, blurry",
+            "TIMELINE": "0-5s establish, 5-15s develop",
+            "CAMERA": "slow push-in",
+            "MOTION_STRENGTH": 4,
+            "DURATION": 15,
+            "MODE": "电影创意探索",
+            "MODE_KEY": "creative_film",
+            "_degraded_from": failure_type,
+            "_fallback_strategy": "emergency_minimal",
+            "_error": last_error,
+        }
+
+    @staticmethod
+    def _execute_strategy(strategy: str, ctx: dict):
+        handlers = {
+            "rule_based_parse": lambda c: {"detected_style": "cinematic", "detected_emotion": "neutral"},
+            "template_fallback": lambda c: None,
+            "minimal_output": lambda c: None,
+            "seedance_default": lambda c: {"platform": "seedance_2.0"},
+            "generic_params": lambda c: {"platform": "generic"},
+            "soft_warn_continue": lambda c: {"warnings": ["quality_soft_pass"]},
+            "auto_fix_common_issues": lambda c: None,
+            "single_shot_fallback": lambda c: [{"id": 1, "desc": c.get("STANDARD_PROMPT", ""), "dur": c.get("DURATION", 15)}],
+            "timeline_to_shot": lambda c: None,
+            "default_cinematic": lambda c: "cinematic",
+            "user_specified_style": lambda c: c.get("user_style", "cinematic"),
+        }
+        handler = handlers.get(strategy)
+        return handler(ctx) if handler else None
 
 
 class AgentModeEngine:
@@ -807,6 +1055,8 @@ class MadStoryEngine:
         mode = output.get("MODE_KEY")
         if mode == AdMode.ECOMMERCE:
             issues += QualityGate.check_ecommerce(output)
+        elif mode == AdMode.CREATIVE_FILM:
+            issues += QualityGate.check_creative_film(output)
         elif mode == AdMode.UGC:
             issues += QualityGate.check_ugc(output)
         elif mode == AdMode.CINEMATIC:

@@ -1,0 +1,92 @@
+{
+  "short_drama_script_format": {
+    "episode_marker": "第X集",
+    "scene_marker": "场景:",
+    "characters_marker": "人物:",
+    "action_prefix": "△",
+    "os_prefix": "(OS)",
+    "dialogue_format": "[角色]: [对白]"
+  },
+  "consistency_protocol": {
+    "long_shot_threshold_s": 15,
+    "checkpoint_interval_s": 10,
+    "character_dossier_fields": {
+      "required": ["visual_mark", "hair_style_color", "makeup", "outfit", "accessories", "wear_state"],
+      "logic_fields": ["traits", "habits", "speech_style"],
+      "timeline_field": "appearance_timeline"
+    },
+    "scene_profile_fields": {
+      "required_spatial": ["spatial_layout", "prop_placement"],
+      "required_env": ["light_direction", "color_temp_k", "weather", "ambient_noise"],
+      "required_props": ["prop_states"],
+      "reference_fields": ["reference_images", "measurement_drawings"]
+    },
+    "scene_id_format": "SC-{ep:02d}-{scene_index:02d}",
+    "timeline_marker_format": "Ep{ep}@{start_s}s-{end_s}s",
+    "acceptance_criteria": {
+      "D1_character_appearance": {"description": "人物外观无矛盾", "checks": ["visual_mark_present", "hair_style_color_present", "outfit_present"]},
+      "D2_behavior_logic": {"description": "行为逻辑无冲突", "checks": ["traits_max_3", "speech_style_present"]},
+      "D3_scene_consistency": {"description": "场景空间无冲突", "checks": ["prop_states_present"]},
+      "D4_continuity": {"description": "跨时段拼接自然", "checks": ["long_shots_have_checkpoints", "pre_shoot_verified", "post_production_verified"]}
+    },
+    "quality_gates": {
+      "short_drama_consistency": [
+        {"rule": "character_dossier_complete", "severity": "blocker"},
+        {"rule": "scene_profile_complete", "severity": "blocker"},
+        {"rule": "long_shot_checkpoints_declared", "severity": "blocker"},
+        {"rule": "cross_episode_appearance_locked", "severity": "blocker"},
+        {"rule": "scene_env_params_consistent", "severity": "warning"}
+      ]
+    }
+  },
+  "quality_guardrails": {
+    "generic_checks": [
+      {"rule": "single_camera_move", "severity": "blocker"},
+      {"rule": "negative_prompt_present", "severity": "blocker"},
+      {"rule": "5_layer_structure", "severity": "warning"}
+    ],
+    "ecommerce_checks": [{"rule": "product_label_readable", "severity": "blocker"}, {"rule": "product_geometry_stable", "severity": "blocker"}],
+    "ugc_checks": [{"rule": "face_identity_locked", "severity": "blocker"}, {"rule": "hands_visible_protected", "severity": "blocker"}],
+    "cinematic_checks": [{"rule": "camera_intentional", "severity": "warning"}, {"rule": "lighting_deliberate", "severity": "warning"}],
+    "multi_shot_checks": [{"rule": "max_3_shots_per_gen", "severity": "blocker"}, {"rule": "character_continuity", "severity": "blocker"}],
+    "one_shot_checks": [{"rule": "image_count_2_to_10", "severity": "blocker"}, {"rule": "spatial_continuity_declared", "severity": "blocker"}],
+    "viral_replicate_checks": [{"rule": "reference_video_specified", "severity": "blocker"}, {"rule": "style_drift_protected", "severity": "blocker"}],
+    "agent_mode_checks": [{"rule": "intent_parsed", "severity": "blocker"}, {"rule": "route_selected", "severity": "blocker"}],
+    "short_drama_checks": [{"rule": "character_registry_exists", "severity": "blocker"}, {"rule": "script_format_valid", "severity": "blocker"}]
+  },
+  "agent_mode_style_detection": {
+    "cinematic": {"keywords": ["电影感", "大片", "film", "cinematic"], "default_submode": "text-to-video"},
+    "anime": {"keywords": ["二次元", "动漫", "anime", "漫画"], "default_submode": "text-to-video"},
+    "3d": {"keywords": ["3D", "三维", "CG"], "default_submode": "text-to-video"},
+    "guofeng": {"keywords": ["国风", "水墨", "古风"], "default_submode": "text-to-video"},
+    "realistic": {"keywords": ["写实", "真实", "照片级"], "default_submode": "text-to-video"},
+    "ugc": {"keywords": ["种草", "测评", "开箱", "口播"], "default_submode": "reference-to-video"}
+  },
+  "camera_language_presets": {
+    "ecommerce_spin": "Center frame, slow 180-degree orbit, white background, motion strength 2",
+    "ecommerce_reveal": "Slow push-in from product base to label, clean shadow floor, 85mm macro",
+    "ugc_talking_head": "Eye-level, subtle handheld feel, medium shot waist-up, natural indoor lighting",
+    "ugc_product_demo": "Over-the-shoulder to product, gentle push-in, social review style",
+    "cinematic_hero": "Low angle to eye-level crane shot, 24mm wide, slow dramatic reveal",
+    "cinematic_dolly": "Side tracking dolly shot, subject moves through frame, 35mm lens",
+    "multi_shot_sequence": "Establishing wide → medium action → close-up emotion, varied angles per shot"
+  },
+  "lighting_atmosphere_presets": {
+    "ecommerce_clean": "Soft overhead diffused light, pure white background, no shadows on product label",
+    "ugc_indoor": "Soft window daylight, subtle ring light catchlight, warm natural tone",
+    "golden_hour": "Warm orange sunlight, long shadows, lens flare, cinematic backlighting",
+    "cyberpunk": "Neon blue and magenta lights, rainy street, wet reflections, high saturation",
+    "noir": "High contrast black and white, dramatic shadows, moody lighting, smoke",
+    "luxury_studio": "Three-point lighting, dark gradient background, rim light on product edges",
+    "dreamy": "Soft focus, pastel colors, hazy atmosphere, glowing highlights"
+  },
+  "sound_design_presets": {
+    "ecommerce_ambient": "Subtle ambient drone, no distractions from product, clean electronic pad",
+    "ugc_vlog": "Light upbeat lo-fi beat, background music stays below voice level",
+    "action": "Fast-paced orchestral, heavy bass, synchronization with character hits",
+    "suspense": "Low drone, heartbeat sound effect, sudden silence for tension",
+    "nature": "Bird chirping, wind rustling leaves, gentle stream background",
+    "sci_fi": "Electronic hum, robotic sounds, atmospheric synth pads",
+    "emotional_piano": "Solo piano, slow tempo, minor key, crescendo at payoff moment"
+  }
+}

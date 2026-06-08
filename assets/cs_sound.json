@@ -1,0 +1,25 @@
+{
+  "cinematic_sound_extended": {
+    "sound_layers": {
+      "dialogue": {"priority": 1, "level": "-12 to -6 dB", "note": "人声清晰度最高优先级"},
+      "music": {"priority": 2, "level": "-18 to -12 dB under dialogue", "note": "不干扰对白的前提下烘托情绪"},
+      "sfx_ambient": {"priority": 3, "level": "-24 to -18 dB", "note": "环境底噪营造空间感"},
+      "sfx_hard": {"priority": 2, "level": "sync with visual", "note": "硬音效与画面动作精确同步"}
+    },
+    "emotional_sound_mapping": {
+      "hope_rising": {"music": "major key ascending melody, strings swell", "ambience": "morning birds, gentle wind", "sfx": "heartbeat slowing"},
+      "tension_building": {"music": "dissonant drone, low freq pulse", "ambience": "silence with room tone only", "sfx": "clock ticking, floor creak"},
+      "emotional_climax": {"music": "full orchestral crescendo or silence", "ambience": "weather intensifying (rain/wind)", "sfx": "breath, heartbeat, impact"},
+      "melancholy_reflection": {"music": "solo piano or cello, slow tempo minor", "ambience": "rain on window, distant traffic", "sfx": "footsteps on wet pavement"},
+      "terror_sudden": {"music": "cut to silence or sharp sting", "ambience": "complete silence before hit", "sfx": "impact, glass break, door slam"},
+      "peaceful_resolution": {"music": "warm pad resolving to tonic", "ambience": "nature sounds returning", "sfx": "exhale, gentle movement"}
+    },
+    "director_sound_signatures": {
+      "christopher_nolan": {"trait": "Hans Zimmer BRAAAM + IMAX bass", "hint": "massive low-frequency impact, minimal dialogue in action sequences"},
+      "denis_villeneuve": {"trait": "Jóhann Jóhannsson drones", "hint": "sustained synthesizer pads, sound as architecture not decoration"},
+      "wes_anderson": {"trait": "Alexandre Desplat whimsical orchestrations", "hint": "percussive precision, music as narrative punctuation mark"},
+      "david_fincher": {"trait": "Trent Reznor & Atticus Ross electronic textures", "hint": "industrial ambient, sound design blurs into score"},
+      "greta_gerwig": {"trait": "period-appropriate song choices", "hint": "diegetic music as character expression, dance sequences"}
+    }
+  }
+}

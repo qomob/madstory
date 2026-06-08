@@ -1,0 +1,102 @@
+{
+  "cinematic_camera_language": {
+    "shot_sizes": {
+      "ecu": {"label": "大特写 (ECU)", "description": "眼睛/手部细节，情绪极致放大", "emotion_intensity": 10, "best_for": "情感爆发点"},
+      "cu": {"label": "特写 (CU)", "description": "面部表情为主，肩部以上入画", "emotion_intensity": 8, "best_for": "对话/内心戏"},
+      "mcu": {"label": "中近景 (MCU)", "description": "胸部以上，保留部分肢体语言", "emotion_intensity": 6, "best_for": "半身表演/产品展示"},
+      "ms": {"label": "中景 (MS)", "description": "腰部以上，人物与环境关系清晰", "emotion_intensity": 5, "best_for": "双人对话/互动"},
+      "mls": {"label": "全景 (MLS)", "description": "全身入画，空间关系完整", "emotion_intensity": 3, "best_for": "建立场景/动作展示"},
+      "ws": {"label": "远景 (WS)", "description": "环境主导，人物比例小", "emotion_intensity": 2, "best_for": "交代环境/孤独感"}
+    },
+    "camera_movements": {
+      "static": {"label": "固定机位", "motivation": "让画面内容自己说话，制造凝视感或紧张感", "prompt_hint": "static camera, locked-off frame"},
+      "push_in": {"label": "推镜头 (Dolly In)", "motivation": "拉近心理距离，强调重要性或揭示细节", "prompt_hint": "slow dolly push-in, camera moves toward subject"},
+      "pull_out": {"label": "拉镜头 (Dolly Out)", "motivation": "拉开心理距离，揭示环境或表达孤立", "prompt_hint": "slow dolly out, camera reveals wider context"},
+      "pan_left_right": {"label": "横摇 (Pan)", "motivation": "跟随动作或扫描场景", "prompt_hint": "smooth horizontal pan following action"},
+      "tilt_up_down": {"label": "纵摇 (Tilt)", "motivation": "揭示垂直空间关系", "prompt_hint": "slow vertical tilt revealing scale"},
+      "tracking": {"label": "跟拍 (Tracking Shot)", "motivation": "与角色同步移动，增强代入感", "prompt_hint": "tracking shot alongside subject, parallax background"},
+      "arc_shot": {"label": "弧形运动 (Arc)", "motivation": "环绕主体展示多角度", "prompt_hint": "circular arc movement around subject"},
+      "crane_up": {"label": "升降 (Crane/Jib)", "motivation": "上帝视角转换，揭示场景全貌", "prompt_hint": "crane shot rising above scene, aerial reveal"},
+      "handheld": {"label": "手持 (Handheld)", "motivation": "纪实感/不安定感/主观视角", "prompt_hint": "subtle handheld shake, documentary feel"},
+      "dutch_angle": {"label": "荷兰角 (Dutch Tilt)", "motivation": "失衡/不安/疯狂", "prompt_hint": "dutch angle, tilted horizon line"},
+      "rack_focus": {"label": "变焦转移 (Rack Focus)", "motivation": "引导注意力转移", "prompt_hint": "rack focus from foreground to background"}
+    },
+    "composition_rules": {
+      "rule_of_thirds": {"label": "三分法", "hint": "主体置于交叉点"},
+      "leading_lines": {"label": "引导线", "hint": "利用线条引导视线至主体"},
+      "frame_within_frame": {"label": "框中框", "hint": "利用门窗/建筑结构创造层次感"},
+      "symmetry": {"label": "对称构图", "hint": "居中对称，传达秩序/压迫/仪式感"},
+      "negative_space": {"label": "留白", "hint": "大面积空旷空间，强调孤独/渺小"},
+      "depth_layers": {"label": "前景-中景-背景", "hint": "三层空间分离，增加纵深感"},
+      "golden_ratio": {"label": "黄金分割", "hint": "1:1.618 比例布局"}
+    }
+  },
+  "cinematic_lighting_extended": {
+    "three_point_classic": {
+      "key_light": "主光 — 45度侧前方，塑造主体形态和主要明暗",
+      "fill_light": "补光 — 对侧柔光，控制阴影深度",
+      "rim_light": "轮廓光 — 后方逆光，勾勒边缘分离背景"
+    },
+    "mood_presets": {
+      "chiaroscuro": {"label": "明暗对照法", "style": "Caravaggio / Film Noir", "hint": "极端明暗对比，戏剧性阴影", "color_temp": "warm tungsten"},
+      "natural_window": {"label": "自然窗光", "style": "Terrence Malick / Barry Jenkins", "hint": "单一窗户光源，柔和渐变", "color_temp": "daylight 5600K"},
+      "practical_lights": {"label": "实景光源", "style": "Soderbergh / Cuarón", "hint": "仅用场景内现有灯具照明", "color_temp": "mixed practical"},
+      "high_key": {"label": "高调布光", "style": "Musical / Romantic Comedy", "hint": "明亮均匀低对比", "color_temp": "neutral daylight"},
+      "low_key": {"label": "低调布光", "style": "Thriller / Horror", "hint": "大量阴影区域，局部光源", "color_temp": "cool blue or warm orange"},
+      "magic_hour": {"label": "魔幻时刻", "style": "Roger Deakins / Lubezki", "hint": "日出日落黄金时段，暖调长影", "color_temp": "golden hour 3200K"},
+      "neon_noir": {"label": "霓虹黑色", "style": "Blade Runner / Refn", "hint": "人造霓虹主光源，冷暖强对比", "color_temp": "magenta vs teal split"},
+      "candlelight_intimacy": {"label": "烛光亲密感", "style": "Period Drama / Barry Lyndon", "hint": "单一点源暖光", "color_temp": "1800K candle warmth"},
+      "overcast_diffused": {"label": "阴天漫射", "style": "European Arthouse / Dardenne", "hint": "无方向性柔光，灰色调", "color_temp": "neutral cool 6500K"}
+    }
+  },
+  "director_style_references": {
+    "wong_kar_wai": {
+      "visual_traits": ["step-printing motion blur", "vibrant saturated colors", "tight close-ups", "shallow depth of field"],
+      "camera_hints": "slow motion handheld, anamorphic lens flares, neon reflections",
+      "mood_keywords": "longing, urban loneliness, fleeting moments, unspoken love"
+    },
+    "christopher_nolan": {
+      "visual_traits": ["IMAX aspect ratio shifts", "practical effects priority", "non-linear narrative time"],
+      "camera_hints": "IMAX camera sweep, continuous take illusions, macro-to-wide reveals",
+      "mood_keywords": "obsession, time manipulation, moral ambiguity, spectacle"
+    },
+    "denis_villeneuve": {
+      "visual_traits": ["geometric compositions", "minimalist framing", "scale contrast human vs environment"],
+      "camera_hints": "slow deliberate movements, wide establishing shots, silhouettes",
+      "mood_keywords": "existential dread, cosmic awe, silence as language"
+    },
+    "akira_kurosawa": {
+      "visual_traits": ["dynamic weather elements", "group choreography", "telephoto lens compression"],
+      "camera_hints": "axial cuts through movement, weather as emotional mirror, geometric blocking",
+      "mood_keywords": "honor, fate, nature's indifference, human resilience"
+    },
+    "sofia_coppola": {
+      "visual_traits": ["pastel palette", "dreamy soft focus", "feminine interior spaces", "ambient light"],
+      "camera_hints": "static observation, natural window light, intimate medium close-ups",
+      "mood_keywords": "ennui, feminine interiority, luxury emptiness, quiet melancholy"
+    }
+  },
+  "creative_film_prompts_library": {
+    "visual_metaphors": [
+      "time as flowing water / sand through fingers / melting clock",
+      "memory as fading photograph / overgrown ruins / echo chamber",
+      "freedom as open door / breaking surface / unfurling wings",
+      "isolation as island / empty theater / snow globe",
+      "transformation as butterfly emergence / season change / sunrise after night"
+    ],
+    "anti_cliche_directives": [
+      "avoid golden hour cliché — find unexpected light quality",
+      "no slow-motion flower petals — use original imagery",
+      "reject generic 'epic' — ground emotion in specific detail",
+      "ban color-grading shortcuts — motivate every hue choice",
+      "forbid default camera moves — every move must earn its existence"
+    ],
+    "emotional_color_palettes": {
+      "nostalgia_faded": "#E8DCC4 warm beige, #B8A99A dusty rose, #7A8B99 muted blue-gray",
+      "anxiety_electric": "#FF006E hot pink, #8338EC deep purple, #3A86FF electric blue",
+      "hope_emerging": "#CAF0F8 pale sky, #ADE8F4 soft cyan, #90E0EF clear water blue",
+      "grief_muted": "#2B2D42 dark navy, #8D99AE slate gray, #EDF2F4 cold white",
+      "passion_saturated": "#D00000 crimson, #E85D04 burnt orange, #FAA307 golden amber"
+    }
+  }
+}

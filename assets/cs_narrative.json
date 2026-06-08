@@ -1,0 +1,35 @@
+{
+  "multi_shot_syntax": {
+    "transition_keywords": {
+      "cut_to": {"behavior": "hard cut", "best_for": "fast action, dramatic reveals"},
+      "camera_cut_to": {"behavior": "explicit camera reposition", "best_for": "interview, documentary"},
+      "shot_switch": {"behavior": "scene transition with visual bridge", "best_for": "narrative, commercials"}
+    },
+    "per_shot_requirements": ["subject", "action", "camera direction", "scene details for new location"],
+    "max_per_generation": 3
+  },
+  "one_shot_transitions": {
+    "push": {"label": "推 (Push)", "keyword": "camera pushes forward through", "duration_range": "2-4s", "best_for": "全景→特写"},
+    "pull": {"label": "拉 (Pull)", "keyword": "camera pulls back revealing", "duration_range": "2-4s", "best_for": "特写→全景"},
+    "spiral": {"label": "螺旋 (Spiral)", "keyword": "spiral rotation centered on", "duration_range": "2.5-3.5s", "best_for": "魔幻/科幻"},
+    "dissolve": {"label": "溶解 (Dissolve)", "keyword": "cross-dissolve to", "duration_range": "1.5-3s", "best_for": "时间流逝"},
+    "match_cut": {"label": "匹配剪辑 (Match Cut)", "keyword": "match cut via", "duration_range": "1-2s", "best_for": "形状/颜色衔接"},
+    "whip_pan": {"label": "甩 (Whip Pan)", "keyword": "whip pan transition to", "duration_range": "0.5-1.5s", "best_for": "快速切换"},
+    "wipe": {"label": "遮挡转场 (Wipe)", "keyword": "wipe transition through", "duration_range": "1-2s", "best_for": "自然遮挡"},
+    "auto": {"label": "AI 自动 (Auto)", "keyword": "smooth auto transition to", "duration_range": "2-3s", "best_for": "自由发挥"}
+  },
+  "viral_replicate_strategies": {
+    "creative_shoot": {"label": "创意拍摄复刻", "pattern": "参考[@视频]运镜，主体更换为[@图片]"},
+    "classic_remake": {"label": "经典影视还原", "pattern": "复刻[@视频]细节，人物替换成[角色]"},
+    "viral_deconstruct": {"label": "爆款拆解再生", "pattern": "解析[@视频]爆点，借鉴风格重新创作"}
+  },
+  "narrative_structures": {
+    "three_act": {"label": "三幕式", "phases": ["Setup (25%)", "Confrontation (50%)", "Resolution (25%)"], "best_for": "经典叙事"},
+    "hero_journey": {"label": "英雄之旅", "phases": ["Ordinary World → Call → Refusal → Mentor → Threshold → Tests → Ordeal → Reward → Return"], "best_for": "成长/冒险故事"},
+    "kishotenketsu": {"label": "起承转合", "phases": ["Ki (Introduction)", "Sho (Development)", "Ten (Twist/Climax)", "Ketsu (Conclusion)"], "best_for": "东方美学/短篇"},
+    "circular": {"label": "圆形结构", "phases": ["Opening image mirrors ending", "Character changed but location same"], "best_for": "宿命/轮回主题"},
+    "parallel": {"label": "平行叙事", "phases": ["Two storylines intercut", "Converge at climax"], "best_for": "双线交织/时空对照"},
+    "reverse_chronology": {"label": "倒叙", "phases": ["End → Beginning revealed last", "Audience recontextualizes"], "best_for": "悬疑/记忆主题"},
+    "single_location": {"label": "单一场景", "phases": ["One room, escalating tension through dialogue and revelation"], "best_for": "密闭空间/心理惊悚"}
+  }
+}

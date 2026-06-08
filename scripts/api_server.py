@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""MadStory REST API + WebSocket 服务 — 企业级 CI/CD 集成"""
+"""MadStory REST API + WebSocket 服务 v3 — 电影级分镜设计引擎（Harness Engineering 驱动）
+支持多平台适配（Seedance / Runway / Kling / Sora），集成 PPAF 循环
+安全加固: Session TTL 30min + 请求限流 (60 req/min) + 输入过滤
+"""
 
 import json
 import os
@@ -28,13 +31,38 @@ REFS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "reference
 
 app = FastAPI(
     title="MadStory API",
-    description="广告级影视分镜引擎 REST API — Seedance 2.0 驱动",
-    version="2.0.0",
+    description="电影级影视分镜引擎 REST API — Harness Engineering 驱动，支持多平台适配",
+    version="3.0.0",
 )
 
 engine = MadStoryEngine(ASSETS, REFS)
 active_sessions = {}
 active_ws = set()
+
+# === 安全加固: Session TTL + 请求限流 ===
+SESSION_TTL = 1800  # 30 分钟
+RATE_LIMIT = 60     # 每分钟请求数
+_request_log: list[tuple[float]] = []  # (timestamp,) 用于滑动窗口限流
+
+
+def _cleanup_expired_sessions():
+    """清理过期 Session（Design for Failure: 防止内存泄漏）"""
+    now = time.time()
+    expired = [sid for sid, data in active_sessions.items()
+               if now - data.get("created_at", 0) > SESSION_TTL]
+    for sid in expired:
+        del active_sessions[sid]
+
+
+def _check_rate_limit():
+    """滑动窗口请求限流（R.E.S.T Security）"""
+    now = time.time()
+    window_start = now - 60
+    global _request_log
+    _request_log = [t for t in _request_log if t > window_start]
+    if len(_request_log) >= RATE_LIMIT:
+        raise HTTPException(429, "请求过于频繁，请稍后重试")
+    _request_log.append(now)
 
 
 class GenerateRequest(BaseModel):
@@ -85,6 +113,7 @@ async def list_modes():
 
 @app.post("/generate")
 async def generate(req: GenerateRequest):
+    _check_rate_limit()  # 请求限流
     if req.mode not in AdMode.LABELS:
         raise HTTPException(400, f"无效模式。可选: {list(AdMode.LABELS.keys())}")
     eng = MadStoryEngine(ASSETS, REFS)
@@ -134,21 +163,24 @@ async def validate(req: ValidateRequest):
 
 @app.post("/session/create")
 async def session_create(req: SessionCreateRequest):
+    _check_rate_limit()
+    _cleanup_expired_sessions()  # 清理过期 Session
     if req.mode not in AdMode.LABELS:
         raise HTTPException(400, f"无效模式")
     import uuid
     sid = str(uuid.uuid4())[:8]
     eng = MadStoryEngine(ASSETS, REFS)
     eng.select_mode(req.mode)
-    active_sessions[sid] = eng
-    return {"session_id": sid, "mode": req.mode, "phase": 0}
+    active_sessions[sid] = {"engine": eng, "created_at": time.time(), "mode": req.mode}
+    return {"session_id": sid, "mode": req.mode, "phase": 0, "ttl_seconds": SESSION_TTL}
 
 
 @app.post("/session/step")
 async def session_step(req: SessionStepRequest):
-    eng = active_sessions.get(req.session_id)
-    if not eng:
+    session = active_sessions.get(req.session_id)
+    if not session:
         raise HTTPException(404, "会话不存在或已过期")
+    eng = session["engine"]
     result = eng.next_phase(req.input)
     if isinstance(result, dict):
         result["checklist"] = eng.run_checklist(result)
@@ -158,9 +190,10 @@ async def session_step(req: SessionStepRequest):
 
 @app.post("/session/save")
 async def session_save(session_id: str):
-    eng = active_sessions.get(session_id)
-    if not eng:
-        raise HTTPException(404, "会话不存在")
+    session = active_sessions.get(session_id)
+    if not session:
+        raise HTTPException(404, "会话不存在或已过期")
+    eng = session["engine"]
     import tempfile
     path = os.path.join(tempfile.gettempdir(), f"madstory_session_{session_id}.json")
     eng.save_session(path)
@@ -169,15 +202,38 @@ async def session_save(session_id: str):
 
 @app.post("/session/load")
 async def session_load(session_id: str):
-    eng = active_sessions.get(session_id)
-    if not eng:
-        raise HTTPException(404, "会话不存在")
+    session = active_sessions.get(session_id)
+    if not session:
+        raise HTTPException(404, "会话不存在或已过期")
+    eng = session["engine"]
     return {
         "session_id": session_id,
         "mode": eng.current_state["mode"],
         "phase": eng.current_state["phase"],
-        "concept": eng.current_state["concept"],
+        "concept": eng.current_state.get("concept", ""),
     }
+
+
+@app.get("/platforms")
+async def list_platforms():
+    """列出所有支持的视频生成平台及其参数能力"""
+    from platform_adapter import list_platforms as _list
+    return {"platforms": _list(), "default": "seedance_2.0"}
+
+
+@app.post("/adapt")
+async def adapt_for_platform(req: GenerateRequest):
+    """将分镜输出适配到指定平台参数"""
+    from platform_adapter import adapt_params, validate_for_platform
+    eng = MadStoryEngine(ASSETS, REFS)
+    eng.current_state["mode"] = req.mode
+    eng.current_state["duration"] = req.duration
+    output = eng.generate_final_output()
+    platform_id = getattr(req, 'platform', 'seedance_2.0')
+    adapted = adapt_params(output, platform_id)
+    issues = validate_for_platform(output, platform_id)
+    adapted["validation_issues"] = issues
+    return adapted
 
 
 @app.websocket("/ws/validate")

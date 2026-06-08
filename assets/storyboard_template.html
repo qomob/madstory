@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MadStory 分镜预览卡片</title>
+    <title>MadStory v3 分镜预览 — 电影级</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --bg: #f8fafc;
-            --text: #1e293b;
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --creative: #a855f7;
             --ecommerce: #059669;
             --ugc: #ea580c;
-            --cinematic: #7c3aed;
-            --multishot: #db2777;
-            --warn-bg: #fef3c7;
+            --cinematic: #f59e0b;
+            --multishot: #ec4899;
+            --warn-bg: #422006;
             --warn-border: #f59e0b;
+            --success: #10b981;
+            --timeline-track: #334155;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -26,19 +32,19 @@
             padding: 2rem;
         }
         .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 700px;
+            max-width: 900px;
             overflow: hidden;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #334155;
         }
         .header {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
             color: white;
-            padding: 1rem 1.25rem;
-            font-size: 1.25rem;
+            padding: 1.25rem 1.5rem;
+            font-size: 1.35rem;
             font-weight: bold;
             display: flex;
             justify-content: space-between;
@@ -46,43 +52,160 @@
         }
         .mode-badge {
             display: inline-block;
-            padding: 2px 10px;
+            padding: 4px 14px;
             border-radius: 99px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .ppaf-indicator {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+        }
+        .ppaf-phase {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+        }
+        .ppaf-phase.done { background: var(--success); }
+        .content { padding: 1.75rem; }
+        .section { margin-bottom: 1.75rem; }
+        .section-title {
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-dim);
+            margin-bottom: 0.6rem;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-title::before {
+            content: '';
+            width: 3px;
+            height: 14px;
+            background: var(--primary-light);
+            border-radius: 2px;
+        }
+
+        /* === 时间轴可视化 (NEW) === */
+        .timeline-visual {
+            background: var(--timeline-track);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .timeline-bar {
+            display: flex;
+            height: 36px;
+            border-radius: 6px;
+            overflow: hidden;
+            gap: 2px;
+            margin-bottom: 0.6rem;
+        }
+        .timeline-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 0.7rem;
             font-weight: 600;
-            text-transform: uppercase;
-            background: rgba(255,255,255,0.2);
+            color: white;
+            transition: transform 0.2s;
+            cursor: default;
+            position: relative;
         }
-        .content {
-            padding: 1.5rem;
+        .timeline-segment:hover { transform: scaleY(1.15); z-index: 2; }
+        .timeline-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            color: var(--text-dim);
         }
-        .section {
-            margin-bottom: 1.5rem;
+
+        /* === 多镜头序列卡片 (NEW) === */
+        .shot-sequence {
+            display: grid;
+            gap: 0.75rem;
         }
-        .section-title {
+        .shot-card {
+            background: #1a2332;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 56px 1fr auto;
+            gap: 1rem;
+            align-items: start;
+            transition: border-color 0.2s;
+        }
+        .shot-card:hover { border-color: var(--primary-light); }
+        .shot-number {
+            width: 56px;
+            height: 56px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
             font-weight: bold;
+            color: white;
+        }
+        .shot-body .shot-duration {
+            font-size: 0.7rem;
+            color: var(--cinematic);
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        .shot-body .shot-desc {
+            font-size: 0.82rem;
+            line-height: 1.55;
+            color: var(--text);
+        }
+        .shot-meta {
+            text-align: right;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+        }
+        .shot-meta .camera-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #334155;
+            border-radius: 4px;
+            margin-top: 0.25rem;
+            font-size: 0.68rem;
+        }
+        .cut-arrow {
+            text-align: center;
+            color: var(--text-dim);
             font-size: 0.8rem;
-            text-transform: uppercase;
-            color: #64748b;
-            margin-bottom: 0.5rem;
-            border-bottom: 1px solid #f1f5f9;
-            padding-bottom: 0.25rem;
+            padding: 0.25rem 0;
         }
         .prompt-box {
-            background: #f1f5f9;
+            background: #0f172a;
             padding: 1rem;
             border-radius: 8px;
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
             font-size: 0.85rem;
-            line-height: 1.5;
+            line-height: 1.6;
             white-space: pre-wrap;
-            border-left: 4px solid var(--primary);
-            max-height: 300px;
+            border-left: 4px solid var(--primary-light);
+            max-height: 320px;
             overflow-y: auto;
+            color: #cbd5e1;
         }
         .negative-box {
-            background: #fef2f2;
             border-left-color: #ef4444;
+            background: #1a0a0a;
         }
         .meta-grid {
             display: grid;
@@ -90,63 +213,102 @@
             gap: 0.75rem;
         }
         .meta-item {
-            background: #f8fafc;
-            padding: 0.75rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
+            background: #0f172a;
+            padding: 0.85rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            border: 1px solid #334155;
         }
         .meta-label {
-            color: #94a3b8;
+            color: var(--text-dim);
             font-size: 0.7rem;
             text-transform: uppercase;
-            margin-bottom: 0.25rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.3rem;
         }
-        .meta-full {
-            grid-column: 1 / -1;
-        }
+        .meta-full { grid-column: 1 / -1; }
         .shot-list {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
         }
         .shot-list th {
-            background: #f1f5f9;
-            padding: 0.5rem 0.75rem;
+            background: #0f172a;
+            padding: 0.6rem 0.85rem;
             text-align: left;
             font-weight: 600;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid #334155;
+            color: var(--text-dim);
         }
         .shot-list td {
-            padding: 0.5rem 0.75rem;
-            border-bottom: 1px solid #f1f5f9;
+            padding: 0.55rem 0.85rem;
+            border-bottom: 1px solid #1e293b;
         }
         .quality-warnings {
             margin-top: 1rem;
-            padding: 0.75rem 1rem;
+            padding: 0.85rem 1.15rem;
             background: var(--warn-bg);
             border: 1px solid var(--warn-border);
-            border-radius: 8px;
-            font-size: 0.8rem;
-            color: #92400e;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            color: #fbbf24;
         }
-        .quality-warnings ul {
-            margin: 0.25rem 0 0 1.25rem;
+        .quality-warnings ul { margin: 0.25rem 0 0 1.25rem; }
+        .quality-checklist {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
         }
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+        }
+        .check-item.pass { color: var(--success); }
+        .check-item.fail { color: #ef4444; }
         .footer {
-            background: #f8fafc;
-            padding: 0.75rem;
+            background: #0f172a;
+            padding: 0.85rem;
             text-align: center;
             font-size: 0.7rem;
-            color: #94a3b8;
-            border-top: 1px solid #e2e8f0;
+            color: var(--text-dim);
+            border-top: 1px solid #334155;
+        }
+        @media (max-width: 640px) {
+            .shot-card { grid-template-columns: 1fr; }
+            .shot-number { width: 44px; height: 44px; font-size: 1.1rem; }
+            .meta-grid { grid-template-columns: 1fr; }
+            .quality-checklist { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="card">
         <div class="header">
-            <span>MadStory 分镜方案</span>
+            <div>
+                <span>MadStory v3 分镜方案</span>
+                <div class="ppaf-indicator">
+                    <span class="ppaf-phase done" title="Perception"></span>
+                    <span class="ppaf-phase done" title="Planning"></span>
+                    <span class="ppaf-phase done" title="Action"></span>
+                    <span class="ppaf-phase done" title="Feedback"></span>
+                </div>
+            </div>
             <span class="mode-badge">{{MODE}}</span>
+        </div>
+
+        <!-- 时间轴可视化 -->
+        <div class="timeline-visual">
+            <div class="timeline-bar" id="timelineBar">
+                <!-- JS 动态渲染: 根据 SHOT_LIST 生成时间轴段 -->
+            </div>
+            <div class="timeline-labels">
+                <span>00:00</span>
+                <span id="totalDuration">{{DURATION}}s</span>
+            </div>
         </div>
         <div class="content">
             <div class="section">
@@ -157,6 +319,25 @@
             <div class="section">
                 <div class="section-title">负向提示词 (Negative Prompt)</div>
                 <div class="prompt-box negative-box">{{NEGATIVE_PROMPT}}</div>
+            </div>
+
+            <!-- 多镜头序列图形展示 (NEW) -->
+            <div class="section" id="shotSequenceSection">
+                <div class="section-title">镜头序列 (Shot Sequence)</div>
+                <div class="shot-sequence" id="shotSequenceGrid">
+                    <!-- JS 动态渲染: 根据 SHOT_LIST 生成镜头卡片 -->
+                    <div class="shot-card">
+                        <div class="shot-number">1</div>
+                        <div class="shot-body">
+                            <div class="shot-duration">{{DURATION}}s · {{CAMERA}}</div>
+                            <div class="shot-desc">{{TIMELINE}}</div>
+                        </div>
+                        <div class="shot-meta">
+                            Motion: {{MOTION_STRENGTH}}/10<br>
+                            <span class="camera-tag">{{MODE}}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="section">
@@ -179,19 +360,44 @@
                         <div>{{MULTI_MODAL_ADVICE}}</div>
                     </div>
                     <div class="meta-item meta-full">
-                        <div class="meta-label">声音设计 (Sound)</div>
+                        <div class="meta-label">声音设计 (Sound Design)</div>
                         <div>{{SOUND_DESIGN}}</div>
                     </div>
                 </div>
             </div>
 
-            {{SHOT_LIST_SECTION}}
-
             {{QUALITY_SECTION}}
         </div>
         <div class="footer">
-            Powered by MadStory Skill · Optimized for Seedance 2.0 · Ad Production Ready
+            Powered by MadStory v3 — 电影级分镜引擎 &middot; Harness Engineering Powered
         </div>
     </div>
+
+    <script>
+    // === 时间轴动态渲染 ===
+    (function() {
+        const colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4', '#ef4444', '#a855f7'];
+        const bar = document.getElementById('timelineBar');
+        if (!bar) return;
+
+        // 尝试从 SHOT_LIST 解析镜头数据
+        const shotData = window.__SHOT_DATA__ || [];
+        if (shotData.length > 0) {
+            renderTimeline(shotData);
+        } else {
+            // Fallback: 单段显示
+            bar.innerHTML = `<div class="timeline-segment" style="width:100%;background:linear-gradient(135deg,#3b82f6,#7c3aed);">${document.getElementById('totalDuration')?.textContent || ''}</div>`;
+        }
+
+        function renderTimeline(shots) {
+            const total = shots.reduce((s, sh) => s + (sh.duration || 5), 0);
+            bar.innerHTML = shots.map((shot, i) => {
+                const pct = ((shot.duration || 5) / total * 100).toFixed(1);
+                const color = colors[i % colors.length];
+                return `<div class="timeline-segment" style="width:${pct}%;background:${color}" title="${shot.name || 'Shot '+(i+1)}: ${shot.duration}s">${i+1}</div>`;
+            }).join('');
+        }
+    })();
+    </script>
 </body>
 </html>
