@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MadStory 分镜预览卡片</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --ecommerce: #059669;
+            --ugc: #ea580c;
+            --cinematic: #7c3aed;
+            --multishot: #db2777;
+            --warn-bg: #fef3c7;
+            --warn-border: #f59e0b;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 700px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.25rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .mode-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: rgba(255,255,255,0.2);
+        }
+        .content {
+            padding: 1.5rem;
+        }
+        .section {
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.25rem;
+        }
+        .prompt-box {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            border-left: 4px solid var(--primary);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .negative-box {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        .meta-item {
+            background: #f8fafc;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        .meta-label {
+            color: #94a3b8;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+        .meta-full {
+            grid-column: 1 / -1;
+        }
+        .shot-list {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        .shot-list th {
+            background: #f1f5f9;
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .shot-list td {
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .quality-warnings {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--warn-bg);
+            border: 1px solid var(--warn-border);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #92400e;
+        }
+        .quality-warnings ul {
+            margin: 0.25rem 0 0 1.25rem;
+        }
+        .footer {
+            background: #f8fafc;
+            padding: 0.75rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <span>MadStory 分镜方案</span>
+            <span class="mode-badge">{{MODE}}</span>
+        </div>
+        <div class="content">
+            <div class="section">
+                <div class="section-title">正向提示词 (Standard Prompt) · {{DURATION}}</div>
+                <div class="prompt-box">{{STANDARD_PROMPT}}</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">负向提示词 (Negative Prompt)</div>
+                <div class="prompt-box negative-box">{{NEGATIVE_PROMPT}}</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">分镜参数</div>
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">时间轴 (Timeline)</div>
+                        <div>{{TIMELINE}}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">镜头运动 (Camera)</div>
+                        <div>{{CAMERA}}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">运动强度 (Motion)</div>
+                        <div>{{MOTION_STRENGTH}}/10</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">多模态建议 (Ref Advice)</div>
+                        <div>{{MULTI_MODAL_ADVICE}}</div>
+                    </div>
+                    <div class="meta-item meta-full">
+                        <div class="meta-label">声音设计 (Sound)</div>
+                        <div>{{SOUND_DESIGN}}</div>
+                    </div>
+                </div>
+            </div>
+
+            {{SHOT_LIST_SECTION}}
+
+            {{QUALITY_SECTION}}
+        </div>
+        <div class="footer">
+            Powered by MadStory Skill · Optimized for Seedance 2.0 · Ad Production Ready
+        </div>
+    </div>
+</body>
+</html>

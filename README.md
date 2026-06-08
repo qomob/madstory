@@ -1,113 +1,174 @@
-# MadStory - Seedance 2.0 影视级分镜助手 (SKILLS 技能包 / SKILLS Package)
+#  MadStory: 专业的影视分镜 AI 技能 (Seedance 2.0 驱动)
 
-[![GitHub](https://img.shields.io/badge/GitHub-RoboErgo%2Fmadstroy-blue?logo=github)](https://github.com/RoboErgo/madstroy)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Author: qomob.ai](https://img.shields.io/badge/Author-qomob.ai-blue)](https://qomob.ai)
+[![ClawHub: mad-story](https://img.shields.io/badge/ClawHub-Install-orange)](https://clawhub.ai/qomob/mad-story)
 
-[中文](#中文) | [English](#english)
+**MadStory** 是一款专为即梦 **Seedance 2.0** 多模态创作设计的影视分镜引导技能。它能将你模糊的电影构思，通过多轮专业对话，逐步推导为包含构图、运镜、光影、声音等全维度细节的专业分镜提示词（Prompts）。
+
+##  核心特性
+
+-  **Seedance 2.0 深度集成**: 完美支持图、影、音、文四模态输入逻辑
+-  **8 种广告创作模式**: 电商产品 / UGC 原生广告 / 电影感品牌短片 / 多镜头叙事 / 一镜到底 / 爆款复刻 / Agent 全链路创作 / 短剧批量生产
+-  **八阶段引导法 (Phase 0-7)**: 从模式选择与意图澄清到最终参数输出，逐阶段推进
+- ⏱️ **15秒精准对齐**: 默认生成 15 秒分镜，支持多镜头序列、一镜到底长镜头、短剧多集连发
+-   **逐秒级构思 (Timeline-based)**: 15 秒时间轴概念，逐秒描述动态变化与关键帧
+-   **一致性管控**: 短剧模式内置全流程一致性管控方案（前期筹备/拍摄执行/后期制作/最终验收），单条 >15s 长戏份自动启用分段校验
+-  **专业术语支持**: 内置影视工业级术语库，涵盖镜头焦距、运镜方式、光影氛围、广告工业术语
+-  **Negative Prompt 自动注入**: 按模式自动生成保护性负向提示词，用户无需手写
+-  **CLI 全链路**: 支持交互式引导、JSON 批处理、REST API、WebSocket 实时校验
+-  **导演级预检**: `director_validator.py` 内置 271 项全模式核验用例
+
+##  8 种创作模式
+
+| 模式 | 适用场景 | Seedance 输入 | 核心约束 |
+|------|---------|--------------|---------|
+| **电商产品** | 商品详情页、主图动效、付费素材 | Image-to-Video | 产品几何不变形、标签可读 |
+| **UGC 原生广告** | 信息流投放、口播、种草测评 | Reference-to-Video | 人脸一致、手势自然 |
+| **电影感品牌短片** | 品牌故事片、发布预告 | Text-to-Video | 镜头意图明确、灯光有逻辑 |
+| **多镜头叙事** | 完整叙事弧线、品牌故事 | Reference-to-Video | ≤3 镜头/次生成，跨镜头一致 |
+| **一镜到底** | 产品体验、空间巡游 | Image-to-Video | 2-10 张图片，空间连续 |
+| **爆款复刻** | 灵感来源、竞品翻拍 | Reference-to-Video | 风格还原、主体替换自然 |
+| **Agent 模式** | 零基础创作、有脚本/素材 | Text-to-Video | 一句话到成片，自动规划 |
+| **短剧创作** | AI 短剧生产、漫剧、小说改编 | Reference-to-Video | 跨集角色一致、>15s 一致性管控 |
+
+##  分镜推导流程 (Phase 0-7)
+
+| Phase | 内容 | 产出 |
+|-------|------|------|
+| **Phase 0** | 模式选择与意图澄清 | Mode 确认 + 输入策略 |
+| **Phase 1** | 核心创意锁定 | Subject + Action 描述 |
+| **Phase 2** | 时间轴与节奏 | Timeline 描述 + 关键帧 |
+| **Phase 3** | 视觉构图 | Composition + 画幅建议 |
+| **Phase 4** | 镜头运动 | Camera 描述 + Motion Strength |
+| **Phase 5** | 光影与质感 | Lighting + 风格预设 |
+| **Phase 6** | 声音设计 | Sound + BGM 建议 |
+| **Phase 7** | 最终合成与参数输出 | 完整提示词 + Negative Prompt + 多模态建议 |
+
+##  目录结构
+
+```text
+mad-story/
+├── SKILL.md            # 技能定位、8模式定义、分镜流程、提示词工程、一致性管控
+├── scripts/
+│   ├── mad_story_engine.py   # 核心引擎 (CLI/API 入口、质量门、短剧引擎、一致性管控)
+│   ├── director_validator.py # 导演级核验工具 (271项全模式边界测试)
+│   ├── api_server.py         # REST API + WebSocket 服务
+│   ├── batch_runner.py       # 目录级批量生产流水线
+│   └── llm_router.py         # LLM 增强路由 (关键词 fallback)
+├── references/
+│   ├── seedance_v2_rules.md  # Seedance 2.0 提示词工程规范 (5层结构/3种输入模式)
+│   ├── terminology.md        # 影视分镜专业术语库
+│   └── pre_flight_checklist.md # 导演级预检清单 (10类检查)
+└── assets/
+    ├── cheat_sheet.json       # 参数速查表 + 模式配置 + 一致性协议参数
+    └── storyboard_template.html # 分镜预览 HTML 模板
+```
+
+## ️ 如何使用
+
+### 作为 AI Skill 触发
+在 AI 助手中输入触发词即可：
+`MadStory` / `影视分镜` / `分镜设计` / `电商视频` / `UGC广告` / `品牌短片` / `多镜头叙事` / `一镜到底` / `爆款复刻` / `短剧创作` / `从一句话出片`
+
+### CLI 命令行
+```bash
+# 交互式引导
+python3 scripts/mad_story_engine.py --interactive
+
+# 一键生成
+python3 scripts/mad_story_engine.py --mode cinematic --concept "雨夜赛博武士" --output result.json --html preview.html
+
+# 短剧模式
+python3 scripts/mad_story_engine.py --mode short_drama --script 剧本.txt --output drama.json
+
+# 批量生产
+python3 scripts/batch_runner.py ./input_specs/ ./output/
+
+# 校验 & 一致性验收
+python3 scripts/director_validator.py --validate result.json
+python3 scripts/director_validator.py --check-consistency drama.json
+```
+
+### REST API
+```bash
+pip install fastapi uvicorn pydantic
+python3 scripts/api_server.py --port 8787
+```
+
+### 用户能力分级
+| 层级 | 推荐模式 | 使用路径 |
+|------|---------|---------|
+| **L1 入门** | Agent 模式 | 输入一句话 → 自动拆解 → 生成分镜方案 |
+| **L2 基础** | 电商 / UGC | Phase 0-7 填空式引导 → 选项卡片 |
+| **L3 进阶** | 多镜头 / 一镜到底 / 爆款复刻 | 手动编排多镜头序列 / 转场设计 |
+| **L4 专业** | 电影感 / 短剧 | 全参数可控、多剧集批量 |
+| **L5 导演级** | 所有模式 + CLI 批量 | `--interactive` / `--validate` 全链路 |
+
+##  短剧一致性管控方案
+
+针对单集 3~5 分钟短剧，单条 >15s 拍摄脚本自动启用全流程一致性管控：
+
+| 阶段 | 管控内容 |
+|------|---------|
+| **前期筹备** | 人物设定档案（外观/性格/行为/台词/时间线）、场景全景清单（空间/陈设/光线/色温/噪音/道具）、全片时间线轴（>15s 自动拆分标记） |
+| **拍摄执行** | 开拍前对照核查、每 10~12s 校验节点 + Reference Frame、环境参数同步留存 |
+| **后期制作** | 剪辑逐帧核查、调色统一、音轨对齐 |
+| **最终验收** | 人物外观无矛盾 / 行为逻辑无冲突 / 场景空间无冲突 / 拼接自然（4 项硬性标准） |
+
+##  示例输出
+
+```json
+{
+  "STANDARD_PROMPT": "雨夜赛博武士穿行霓虹街道，侧面跟拍，快速可控节奏，反光水洼，电影感红蓝对比色调",
+  "NEGATIVE_PROMPT": "no shaky camera, no object melting, no random text, no muddy lighting, no flat blacks",
+  "TIMELINE": "0-5s intro, 5-12s core action, 12-15s ending",
+  "CAMERA": "Second-by-second: 0-5s intro, 5-12s core action, 12-15s ending. Camera: side tracking dolly shot.",
+  "MOTION_STRENGTH": 5,
+  "DURATION": "15s",
+  "MODE": "电影感品牌短片",
+  "MODE_KEY": "cinematic",
+  "MULTI_MODAL_ADVICE": "建议上传具有相似色调和光位的高质量参考图以获得最佳光效",
+  "SOUND_DESIGN": "ambient drone",
+  "SHOT_LIST": []
+}
+```
+
+##  质量保障
+
+`director_validator.py` 内置 **271 项** 全模式核验用例，覆盖：
+
+- 输出结构完整性 (所有 8 模式)
+- Negative Prompt 合规性扫描
+- 边界条件测试 (空输入/无效模式/全空字段)
+- 镜头运动约束强制 (单运动原则)
+- 一镜到底/爆款复刻/Agent 模式引擎边界
+- 一致性管控台账 + 校验器全流程 (B1-D4)
+- 短剧长戏份一致性
+- 资源文件完整性 & 模式枚举完整性
+
+##  ️ CLI 参数参考
+
+| 参数 | 说明 |
+|------|------|
+| `--mode, -m` | 创作模式 (ecommerce/ugc/cinematic/multi_shot/one_shot/viral_replicate/agent_mode/short_drama) |
+| `--concept, -c` | 核心创意描述 |
+| `--output, -o` | 输出 JSON 文件路径 |
+| `--html` | 输出 HTML 预览文件路径 |
+| `--validate` | 校验已生成的 JSON 输出 |
+| `--check-consistency` | 短剧一致性最终验收 |
+| `--script` | 短剧剧本文件路径 |
+| `--interactive, -i` | 交互式引导模式 |
+| `--session` / `--load` | Session 持久化 |
+| `--list-modes` | 列出所有模式 |
+
+##  贡献与反馈
+
+欢迎提交 Issue 或 Pull Request 来优化分镜引导逻辑或术语库。
+
+##  许可证
+
+本项目采用 [MIT License](https://opensource.org/licenses/MIT) 开源协议。
 
 ---
-
-## 中文
-
-**MadStory** 是一个基于 **Seedance 2.0 使用手册** 深度定制并打包的 **SKILLS 技能包**。它旨在通过 AI Agent 的能力，将复杂的影视制作规范转化为可交互的创作流程。
-
-### 📦 SKILLS 技能包定义
-
-本项目遵循 [Claude's skills](https://github.com/anthropics/skills) 的规范进行组织，通过结构化的 `SKILL.md` 定义 Agent 的行为边界：
-
-- **基于手册**：核心逻辑严格参考 [Seedance 2.0 技术规格指南](references/seedance_guide.md)。
-- **能力内化**：将 5 维度控制（镜头、光影、色彩、动作、声音）内化为 Agent 的导演思维。
-- **即插即用**：支持在兼容 Claude Skills 规范的 AI 环境中直接加载使用。
-
-### 🌟 核心特性
-
-- **结构化访谈**：采用 3 阶段导演式对话，从视觉基础、氛围塑造到声音节奏，全方位挖掘创意细节。
-- **5 维度控制**：精准覆盖镜头运动、光影氛围、色彩基调、主体动作及声音设计。
-- **Seedance 2.0 深度优化**：
-  - 默认输出 **15 秒** 专业片段时长。
-  - 支持**多模态参考**（图像/视频/音频）提示。
-  - 提示词结构完美契合 Seedance 2.0 的生成引擎。
-- **双语支持**：内置完善的中英文切换逻辑，适配国际化创作环境。
-
-### 🚀 快速开始
-
-#### 1. 安装 (CLI)
-```bash
-npm install madstory-seedance2 -g
-```
-
-#### 2. 初始化
-```bash
-madstory init --provider seedance2
-madstory auth --token YOUR_TOKEN
-```
-
-#### 3. 使用技能
-在 AI 助手（如 Trae, Claude 等）中加载此技能包，或通过 CLI 生成：
-```bash
-madstory generate "一名宇航员在火星发现发光的石碑" --duration 15
-```
-
-### 📂 文件结构
-
-- `SKILL.md`: **核心技能定义**，包含详细的 Persona 与 Workflow 规范。
-- `references/seedance_guide.md`: Seedance 2.0 原始技术手册参考。
-- `verify_madstory.py`: 技能交互逻辑自动化验证脚本。
-
----
-
-## English
-
-**MadStory** is a **SKILLS package** deeply customized based on the **Seedance 2.0 User Manual**. It leverages AI Agent capabilities to transform complex film production standards into an interactive creative workflow.
-
-### 📦 SKILLS Package Definition
-
-This project is organized following the [Claude's skills](https://github.com/anthropics/skills) specification, defining Agent behavioral boundaries through a structured `SKILL.md`:
-
-- **Manual-Based**: Core logic strictly references the [Seedance 2.0 Technical Specifications Guide](references/seedance_guide.md).
-- **Inherent Capabilities**: Internalizes 5-dimensional controls (Camera, Lighting, Color, Action, Sound) into the Agent's directorial mindset.
-- **Plug-and-Play**: Supports direct loading in AI environments compatible with the Claude Skills specification.
-
-### 🌟 Key Features
-
-- **Structured Interviews**: Uses a 3-phase directorial dialogue to extract creative details across visual foundations, atmosphere, and rhythm.
-- **5-Dimensional Control**: Precisely covers camera movement, lighting atmosphere, color tone, subject action, and sound design.
-- **Seedance 2.0 Deep Optimization**:
-  - Default output duration of **15 seconds**.
-  - Supports **multimodal reference** (image/video/audio) prompting.
-  - Prompt structures perfectly aligned with the Seedance 2.0 generation engine.
-- **Bilingual Support**: Built-in logic for seamless switching between Chinese and English, catering to global creators.
-
-### 🚀 Quick Start
-
-#### 1. Installation (CLI)
-```bash
-npm install madstory-seedance2 -g
-```
-
-#### 2. Initialization
-```bash
-madstory init --provider seedance2
-madstory auth --token YOUR_TOKEN
-```
-
-#### 3. Using the Skill
-Load this skills package in AI assistants (e.g., Trae, Claude) or generate via CLI:
-```bash
-madstory generate "An astronaut discovers a glowing monolith on Mars" --duration 15
-```
-
-### 📂 File Structure
-
-- `SKILL.md`: **Core Skill Definition**, containing detailed Persona and Workflow specifications.
-- `references/seedance_guide.md`: Original Seedance 2.0 technical manual reference.
-- `verify_madstory.py`: Automated validation script for skill interaction logic.
-
----
-
-### 📄 License
-
-This project is licensed under the [MIT](LICENSE) License.
-
----
-*Developed by the RoboErgo team. Built based on the SKILLS specification.*
+Created with   by **[qomob.ai](https://qomob.ai)** | [Install on ClawHub](https://clawhub.ai/qomob/mad-story)
