@@ -1,15 +1,17 @@
 ---
 name: mad-story
 description: >-
-  电影级影视分镜设计引擎，支持多平台视频生成（Seedance / Runway / Kling / Sora）。
+  电影级影视分镜设计引擎，支持多平台视频生成（Seedance / Runway / Kling / Sora）及图片生成（Seedream 4.x/5.x）。
   支持 9 种创作模式：电影创意探索、电商产品展示、UGC 原生广告、电影感品牌短片、多镜头叙事、一镜到底、
   爆款复刻、Agent 全链路创作、短剧批量生产。
   融合 Harness Engineering 工程哲学（PPAF 循环 + R.E.S.T 可靠性模型），提供从一句话到专业电影级分镜提示词的完整推导流程。
   内置多平台参数优化、Negative Prompt 自动注入、一致性管控和导演级预检。
+  支持 Seedream 4.x/5.x 图片生成：文生图、图像编辑（增删替换改）、参考图生图、多图输入/输出、知识可视化。
   当用户提到 MadStory、影视分镜、分镜设计、电影分镜、广告分镜、电商视频、
   UGC 广告、品牌短片、多镜头叙事、一镜到底、爆款复刻、短剧创作、从一句话出片、
-  制作短视频、AI 视频生成、生成视频提示词、抖音脚本、分镜脚本、脚本提示词，或任何涉及 AI 视频分镜创作的需求时，务必使用此技能。
-version: 3.1.0
+  制作短视频、AI 视频生成、生成视频提示词、抖音脚本、分镜脚本、脚本提示词、
+  Seedream、文生图、图像编辑、参考图生图、AI绘图、AI生图，或任何涉及 AI 视频/图片分镜创作的需求时，务必使用此技能。
+version: 3.2.0
 author: qomob.ai
 license: MIT
 platforms:
@@ -29,14 +31,15 @@ batch_runner: scripts/batch_runner.py
 validator: scripts/director_validator.py
 ---
 
-# MadStory — 电影级影视分镜技能 v3.1 (分层加载架构)
+# MadStory — 电影级影视分镜技能 v3.2 (分层加载架构)
 
 ## 技能定位
-MadStory 是面向电影级内容生产的专业分镜设计引擎，基于 **Harness Engineering** (PPAF 循环 + R.E.S.T 可靠性模型)。
+MadStory 是面向电影级内容生产的专业分镜设计引擎，基于 **Harness Engineering** (PPAF 循环 + R.E.S.T 可靠性模型)。同时支持 **Seedream 4.x/5.x 图片生成**（文生图、图像编辑、参考图生图、多图输入/输出、知识可视化）。
 
-- **触发词**: `MadStory`, `影视分镜`, `分镜设计`, `电影分镜`, `电商视频`, `UGC广告`, `品牌短片`, `多镜头叙事`, `一镜到底`, `爆款复刻`, `短剧创作`, `从一句话出片`, `抖音脚本`, `AI电影`
-- **目标用户**: 电影导演、广告导演、创意总监、影视制作人、电商运营、品牌营销、内容创作者、短剧制作人、零基础创作者
-- **默认时长**: 15 秒 / 镜头，支持多镜头序列和长视频 (>1 min)
+- **触发词**: `MadStory`, `影视分镜`, `分镜设计`, `电影分镜`, `电商视频`, `UGC广告`, `品牌短片`, `多镜头叙事`, `一镜到底`, `爆款复刻`, `短剧创作`, `从一句话出片`, `抖音脚本`, `AI电影`, `Seedream`, `文生图`, `图像编辑`, `参考图生图`, `AI绘图`, `AI生图`
+- **目标用户**: 电影导演、广告导演、创意总监、影视制作人、电商运营、品牌营销、内容创作者、短剧制作人、零基础创作者、平面设计师
+- **默认时长**: 15 秒 / 镜头（视频），图片模式无时长限制
+- **支持平台**: Seedance 2.0 / Runway / Kling / Sora (视频), Seedream 4.x/5.x (图片)
 
 ## 分层加载架构 (Progressive Loading)
 
@@ -60,6 +63,7 @@ MadStory 是面向电影级内容生产的专业分镜设计引擎，基于 **Ha
 | 需要精确镜头术语 | `references/terminology.md` | 影视专业术语库 |
 | 分镜方案输出前检查 | `references/pre_flight_checklist.md` | 导演级预检清单 |
 | 需要平台参数参考 | `references/seedance_v2_rules.md` | Seedance 2.0 提示词工程规范 |
+| 使用 Seedream 4.x/5.x 或涉及图片生成 | `references/seedream_4x_rules.md` | Seedream 4.x/5.x 文生图/图像编辑/参考图/多图规则 |
 
 ### Layer 2: 深度加载 (~3,000 tokens/次)
 以下资源仅在特定高级场景下加载:
@@ -120,6 +124,7 @@ MadStory 是面向电影级内容生产的专业分镜设计引擎，基于 **Ha
 
 ## 输出规范
 
+### 视频模式输出 (Seedance/Runway/Kling/Sora)
 每个分镜方案必须包含:
 1. **STANDARD_PROMPT**: 符合 5 层结构的完整正向提示词
 2. **NEGATIVE_PROMPT**: 按 Mode 自动生成的负向提示词
@@ -131,7 +136,21 @@ MadStory 是面向电影级内容生产的专业分镜设计引擎，基于 **Ha
 8. **MULTI_MODAL_ADVICE**: 参考图/视频/音频建议
 9. **SHOT_LIST** (多镜头模式): 分镜头脚本表
 
+### 图片模式输出 (Seedream 4.x/5.x)
+> 完整规则见 `references/seedream_4x_rules.md`
+
+每个图片方案必须包含:
+1. **IMAGE_PROMPT**: 符合 3 层结构（主体+行为+环境，风格/色彩/光影/构图补充）
+2. **TEXT_CONTENT**: 需渲染的文字（双引号包裹）
+3. **REFERENCE_TYPE**: 参考类型（人物形象/风格/虚拟实体/款式/无）
+4. **EDIT_OPERATION**: 编辑操作（增加/删除/替换/修改/无）
+5. **MULTI_IMAGE_OP**: 多图操作（替换/组合/迁移/无）
+6. **MODE**: 模式标签
+7. **PLATFORM**: Seedream 4.x/5.x
+
 ## 质量门禁 (Quality Gates)
+
+### 视频模式
 - 产品标签不可读或变形 → Ecommerce 不合格
 - 人脸在两个镜头间不一致 → UGC / Short Drama 不合格
 - 一个镜头内超过 1 个主导运动 → 任何 Mode 不合格
@@ -141,3 +160,9 @@ MadStory 是面向电影级内容生产的专业分镜设计引擎，基于 **Ha
 - 爆款复刻风格偏离参考 → Viral Replicate 不合格
 - Agent 模式意图解析完全偏离 → Agent 不合格
 - 短剧角色跨集不一致 → Short Drama 不合格
+
+### 图片模式 (Seedream 4.x/5.x)
+- 文字内容未用双引号包裹 → 图片模式不合格
+- 图像编辑指令指代模糊（使用代词而非具体对象） → 图片模式不合格
+- 参考图生图未指明参考对象和生成画面 → 图片模式不合格
+- 多图输入未明确图一/图二角色分配 → 图片模式不合格

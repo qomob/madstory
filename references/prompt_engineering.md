@@ -135,3 +135,5 @@ Cut to
 3. 镜头运动是否过于激进？
 4. 主体在画面中是否过小？
 5. 多个 Reference 是否存在冲突？
+
+> **Seedream 4.x/5.x 图片模式**: 当检测到用户使用 Seedream 平台或需要图片生成时，加载 `references/seedream_4x_rules.md` 获取图片模式提示词结构、文字渲染、图像编辑、参考图生图、多图输入/输出语法。图片模式不适用本文件的 5 层结构和 Negative Prompt。

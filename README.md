@@ -1,15 +1,23 @@
-# MadStory: 电影级影视分镜设计引擎 v3.0 (Harness Engineering Powered)
+# MadStory: 电影级影视分镜设计引擎 v3.2 (Harness Engineering Powered)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Author: qomob.ai](https://img.shields.io/badge/Author-qomob.ai-blue)](https://qomob.ai)
-[![Version: 3.0](https://img.shields.io/badge/Version-3.0.0-green.svg)](https://clawhub.ai/qomob/mad-story)
+[![Version: 3.2](https://img.shields.io/badge/Version-3.2.0-green.svg)](https://clawhub.ai/qomob/mad-story)
 [![ClawHub: mad-story](https://img.shields.io/badge/ClawHub-Install-orange)](https://clawhub.ai/qomob/mad-story)
 
-**MadStory v3** 是一款 **电影级影视分镜设计引擎**，融合 **Harness Engineering 工程哲学**（PPAF 循环 + R.E.S.T 可靠性模型）。支持多平台视频生成（Seedance / Runway / Kling / Sora），能将你模糊的电影构思，通过专业推导流程，逐步转化为包含构图、运镜、光影、声音等全维度细节的专业分镜提示词。
+**MadStory v3.2** 是一款 **电影级影视分镜设计引擎**，融合 **Harness Engineering 工程哲学**（PPAF 循环 + R.E.S.T 可靠性模型）。支持多平台视频生成（Seedance / Runway / Kling / Sora）**及图片生成（Seedream 4.x/5.x）**，能将你模糊的电影构思，通过专业推导流程，逐步转化为包含构图、运镜、光影、声音等全维度细节的专业分镜提示词。
 
-## 核心特性 (v3.0 新增)
+## 核心特性 (v3.2 新增)
 
-- **9 种创作模式**: 电影创意探索(NEW) / 电商产品 / UGC 原生广告 / 电影感品牌短片 / 多镜头叙事 / 一镜到底 / 爆款复刻 / Agent 全链路创作 / 短剧批量生产
+- **Seedream 4.x/5.x 图片生成**: 文生图、图像编辑（增加/删除/替换/修改）、参考图生图（4种参考类型）、多图输入/输出、知识可视化
+- **分层懒加载架构**: SKILL.md 始终加载，其他资源按交互阶段按需加载，视频场景零图片内容 token 开销
+- **双模式输出规范**: 视频模式（5层提示词结构 + Negative Prompt）与图片模式（3层结构 + 文字渲染 + 图像编辑语法）独立定义
+- **双模式质量门禁**: 视频模式与图片模式分别定义质量不合格条件
+- **图片模式预检清单**: 新增 Seedream 4.x/5.x 专项预检项（文字渲染、编辑指令、参考图类型等）
+
+## 核心特性 (v3.0)
+
+- **9 种创作模式**: 电影创意探索 / 电商产品 / UGC 原生广告 / 电影感品牌短片 / 多镜头叙事 / 一镜到底 / 爆款复刻 / Agent 全链路创作 / 短剧批量生产
 - **Harness Engineering 融合**: PPAF 循环状态追踪 + R.E.S.T 四维合规检查 + 失败降级路径 (Design for Failure)
 - **多平台适配层**: 解耦单一平台依赖，支持 Seedance 2.0 / Runway Gen-3 / Kling / Sora 参数自动映射与约束校验
 - **LLM Router v2 增强**: 多意图拆分(Classify-and-Act) + Tournament 创意评分 + 语义解析增强（导演参照/视觉隐喻/反套路检测）
@@ -48,23 +56,28 @@
 
 ```text
 mad-story/
-├── SKILL.md                 # 技能定义 v3.0 — 9模式/电影级定位/Harness架构
+├── SKILL.md                 # 技能定义 v3.2 — 双模式/分层懒加载/Harness架构
 ├── README.md                # 本文件
 ├── scripts/
 │   ├── mad_story_engine.py  # 核心引擎 + PPAFState/RESTCompliance/FailurePath
-│   ├── platform_adapter.py  # 多平台适配层 (Seedance/Runway/Kling/Sora)
+│   ├── platform_adapter.py  # 多平台适配层 (Seedance/Runway/Kling/Sora/Seedream)
 │   ├── llm_router.py        # LLM Router v2 — 多意图拆分/Tournament/Classify-and-Act
 │   ├── director_validator.py # 导演级核验工具 (271项全模式边界测试)
 │   ├── api_server.py        # REST API + WebSocket (安全加固: TTL+限流)
 │   └── batch_runner.py      # 目录级批量生产流水线
 ├── references/
-│   ├── seedance_v2_rules.md # Seedance 2.0 提示词工程规范
-│   ├── terminology.md       # 影视分镜专业术语库
-│   ├── pre_flight_checklist.md # 导演级预检清单
-│   └── examples/            # 电影级端到端案例 (v3.0 NEW)
-│       ├── example_1_creative_film.md   # 创意探索模式案例
-│       ├── example_2_multi_shot.md      # 多镜头叙事案例
-│       └── example_3_short_drama.md     # 短剧生产案例
+│   ├── modes_detail.md      # 9种模式详细说明 (Layer 1 按需加载)
+│   ├── phases_detail.md     # Phase 0-7 详细推导指引 (Layer 1)
+│   ├── prompt_engineering.md # 视频提示词5层结构+Negative Prompt (Layer 1)
+│   ├── seedance_v2_rules.md # Seedance 2.0 提示词工程规范 (Layer 1)
+│   ├── seedream_4x_rules.md # Seedream 4.x/5.x 图片生成规范 (Layer 1, v3.2 NEW)
+│   ├── terminology.md       # 影视分镜专业术语库 (Layer 1)
+│   ├── pre_flight_checklist.md # 导演级预检清单 (含图片模式预检, Layer 1)
+│   ├── short_drama_consistency.md # 短剧全流程一致性管控 (Layer 2)
+│   └── examples/            # 电影级端到端案例
+│       ├── example_1_creative_film.md
+│       ├── example_2_multi_shot.md
+│       └── example_3_short_drama.md
 └── assets/
     ├── cheat_sheet.json     # 参数速查表 v3 — 含电影级镜头语言/光影/声音/导演参考
     └── storyboard_template.html # 分镜预览模板 v3 — 暗色UI/时间轴可视化/镜头序列
@@ -74,7 +87,7 @@ mad-story/
 
 ### 作为 AI Skill 触发
 在 AI 助手中输入触发词即可：
-`MadStory` / `影视分镜` / `分镜设计` / `电商视频` / `UGC广告` / `品牌短片` / `多镜头叙事` / `一镜到底` / `爆款复刻` / `短剧创作` / `从一句话出片`
+`MadStory` / `影视分镜` / `分镜设计` / `电商视频` / `UGC广告` / `品牌短片` / `多镜头叙事` / `一镜到底` / `爆款复刻` / `短剧创作` / `从一句话出片` / `Seedream` / `文生图` / `图像编辑` / `参考图生图` / `AI绘图` / `AI生图`
 
 ### CLI 命令行
 ```bash
@@ -123,6 +136,7 @@ python3 scripts/api_server.py --port 8787
 
 ##  示例输出
 
+### 视频模式
 ```json
 {
   "STANDARD_PROMPT": "雨夜赛博武士穿行霓虹街道，侧面跟拍，快速可控节奏，反光水洼，电影感红蓝对比色调",
@@ -136,6 +150,19 @@ python3 scripts/api_server.py --port 8787
   "MULTI_MODAL_ADVICE": "建议上传具有相似色调和光位的高质量参考图以获得最佳光效",
   "SOUND_DESIGN": "ambient drone",
   "SHOT_LIST": []
+}
+```
+
+### 图片模式 (Seedream 4.x/5.x)
+```json
+{
+  "IMAGE_PROMPT": "一个穿着华丽服装的女孩，撑着遮阳伞走在林荫道上，莫奈油画风格，柔和光影，印象派色彩",
+  "TEXT_CONTENT": "\"Seedream 4.5\"",
+  "REFERENCE_TYPE": "无",
+  "EDIT_OPERATION": "无",
+  "MULTI_IMAGE_OP": "无",
+  "MODE": "电影创意探索",
+  "PLATFORM": "Seedream 4.5"
 }
 ```
 
@@ -182,4 +209,4 @@ python3 scripts/api_server.py --port 8787
 本项目采用 [MIT License](https://opensource.org/licenses/MIT) 开源协议。
 
 ---
-**MadStory v3.0** — 电影级影视分镜设计引擎 | Harness Engineering Powered | Created by **[qomob.ai](https://qomob.ai)** | [Install on ClawHub](https://clawhub.ai/qomob/mad-story)
+**MadStory v3.2** — 电影级影视分镜设计引擎 | Harness Engineering Powered | Created by **[qomob.ai](https://qomob.ai)** | [Install on ClawHub](https://clawhub.ai/qomob/mad-story)
