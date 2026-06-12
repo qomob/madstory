@@ -107,3 +107,86 @@
 - **Narration Adaptation**: 旁白改编。Agent 自动将剧本中的环境描述和 OS 改为视频旁白。
 - **Multi-Style Support**: 多画风支持。同一剧本可切换写实/漫画/3D/二次元等不同画风输出。
 
+## 速度修饰词 (Speed Modifiers)
+
+| 速度 | 关键词 | 稳定性 |
+|------|--------|--------|
+| 极慢 | imperceptible, barely, 几乎不动 | 最稳 |
+| 慢 | slow, gentle, gradual, 缓慢 | 推荐，默认 |
+| 自然 | smooth, controlled, 平稳 | 安全 |
+| 动态 | dynamic, swift, 灵动 | 慎用 |
+| 快 | fast, rapid, 快速 | 极易翻车，避免 |
+
+动作越慢越顺，视频越稳。
+
+## 情绪关键词 (Emotion Keywords)
+
+### 正面情绪
+| 情绪 | 画面提示词 | 配合景别 |
+|------|-----------|----------|
+| 惊喜 | eyes widen, mouth slightly open, brightening | 近景 |
+| 得意 | smirk, chin raised, confident gaze | 中景 |
+| 温柔 | soft smile, eyes crinkling, tender look | 特写 |
+| 感动 | tears welling, trembling lips, emotional | 近景 |
+
+### 负面情绪
+| 情绪 | 画面提示词 | 配合景别 |
+|------|-----------|----------|
+| 震惊 | frozen expression, eyes wide, pale face | 特写 |
+| 愤怒 | jaw clenched, nostrils flared, piercing stare | 近景 |
+| 隐忍 | pressed lips, averted gaze, restrained | 中景 |
+| 绝望 | hollow eyes, slump shoulders, defeated | 全景→近景推 |
+
+### 复杂情绪
+| 情绪 | 画面提示词 |
+|------|-----------|
+| 冷笑 | one-sided smirk, cold eyes, slow head tilt |
+| 不屑 | raised eyebrow, slight sneer, turned away |
+| 心机 | calculating gaze, slight smile, half-shadowed face |
+| 伪装 | forced smile, tense shoulders, eyes not matching mouth |
+
+## 画质关键词 (Quality Keywords)
+
+标准画质词（每段必加）：`4K高清，面部稳定不变形，五官清晰，细节丰富`
+
+| 关键词 | 效果 |
+|--------|------|
+| 8K超清 | 极致清晰度 |
+| 电影级质感 | 专业电影感 |
+| 35mm胶片感 | 复古电影质感 |
+| 哈苏质感 | 高端摄影质感 |
+| 动态光影 | 光影有层次 |
+| 真实面料纹理 | 服装质感真实 |
+| 浅景深/bokeh | 背景虚化突出主体 |
+| 胶片颗粒感 | 复古质感 |
+
+## 风格关键词 (Style Keywords)
+
+| 风格 | 关键词组合 |
+|------|-----------|
+| 写实都市 | cinematic realism, urban drama, modern aesthetic |
+| 中国古风 | Chinese period drama, ink wash style, silk texture |
+| 仙侠 | xianxia fantasy, ethereal glow, celestial atmosphere |
+| 日系治愈 | Japanese soft tone, pastel warmth, gentle atmosphere |
+| 港风复古 | Hong Kong vintage, film grain, neon glow |
+| 赛博朋克 | cyberpunk, neon-lit, futuristic, dystopian |
+| 暗黑悬疑 | dark thriller, noir atmosphere, dramatic contrast |
+| 漫剧/动漫 | anime style, cel shading, vibrant colors |
+| 纪实风格 | documentary style, natural lighting, handheld camera |
+
+## 音频专业术语 (Audio & Sound Design)
+- **Foley**: 拟音。在录音棚中模拟并录制与画面同步的日常音效（脚步声、衣物摩擦、开关门等）。
+- **ADR (Automated Dialogue Replacement)**: 自动对白替换。后期在录音棚中重新录制对白，替换现场收音质量不佳的台词。
+- **混音 (Mixing)**: 将对白、音效、音乐等多轨音频按比例混合为最终声轨的过程。
+- **声场 (Sound Stage / Sound Field)**: 声音在三维空间中的分布和定位，包括宽度、深度和高度感。
+- **低频冲击 (Low-Frequency Impact / LFE)**: 影院级低频音效（爆炸、撞击），增强物理沉浸感。Nolan 风格标志。
+- **环境音 (Ambience / Room Tone)**: 场景的背景声音层，建立空间真实感（空调声、远处的交通声等）。
+- **音画同步 (Sync Point / Hit Point)**: 音效与画面关键动作精确对齐的时间点。
+- **声音设计 (Sound Design)**: 创造性音频制作，包括音效合成、氛围营造和声音特效。
+- **对白清晰度 (Dialogue Intelligibility)**: 对白在混音中的可辨识程度，UGC/口播类内容的核心指标。
+- **BGM (Background Music)**: 背景音乐。电商模式需保持在产品之下，UGC 模式需保持在语音之下。
+- **音效 (SFX / Sound Effects)**: 特定动作或事件的声音效果（倒水声、点击声、转场音效等）。
+- **旁白 (Voiceover / OS)**: 画面外的叙述声音，短剧模式中 Agent 自动将环境描述改编为旁白。
+- **动态范围 (Dynamic Range)**: 音频中最安静与最响部分之间的差值。电影感需要大动态范围，UGC 需要压缩动态范围。
+- **频段 (Frequency Band)**: 音频的频率分区。低频(20-250Hz)营造氛围，中频(250-4kHz)承载人声，高频(4-20kHz)增加细节和空气感。
+

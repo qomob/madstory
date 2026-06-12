@@ -20,26 +20,44 @@ from mad_story_engine import (
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets")
 REFS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "references")
 
-PASS = 0
-FAIL = 0
+
+class TestResult:
+    def __init__(self):
+        self.passed = 0
+        self.failed = 0
+
+    def assert_true(self, condition, label):
+        if condition:
+            self.passed += 1
+            print(f"  [PASS] {label}")
+        else:
+            self.failed += 1
+            print(f"  [FAIL] {label}")
+
+    def assert_false(self, condition, label):
+        self.assert_true(not condition, label)
+
+    def assert_equal(self, a, b, label):
+        self.assert_true(a == b, f"{label}: expected={repr(b)}, got={repr(a)}")
+
+    @property
+    def total(self):
+        return self.passed + self.failed
+
+
+_r = TestResult()
 
 
 def assert_true(condition, label):
-    global PASS, FAIL
-    if condition:
-        PASS += 1
-        print(f"  [PASS] {label}")
-    else:
-        FAIL += 1
-        print(f"  [FAIL] {label}")
+    _r.assert_true(condition, label)
 
 
 def assert_false(condition, label):
-    assert_true(not condition, label)
+    _r.assert_false(condition, label)
 
 
 def assert_equal(a, b, label):
-    assert_true(a == b, f"{label}: expected={repr(b)}, got={repr(a)}")
+    _r.assert_equal(a, b, label)
 
 
 # ============================================================
@@ -397,8 +415,8 @@ def test_duration_compliance():
 
 def test_mode_enum_integrity():
     print("\n=== 模式枚举完整性校验 ===")
-    assert_equal(len(AdMode.LABELS), 8, "应有 8 个模式")
-    assert_equal(len(AdMode.DEFAULT_SEEDANCE_MODE), 8, "应有 8 个 Seedance 映射")
+    assert_equal(len(AdMode.LABELS), 9, "应有 9 个模式")
+    assert_equal(len(AdMode.DEFAULT_SEEDANCE_MODE), 9, "应有 9 个 Seedance 映射")
     for mode_key in AdMode.LABELS:
         assert_true(mode_key in AdMode.DEFAULT_SEEDANCE_MODE, f"{mode_key} 缺 Seedance 映射")
 
@@ -638,7 +656,6 @@ def test_short_drama_long_shot_consistency():
 # ============================================================
 
 def run_all():
-    global PASS, FAIL
     print("=" * 70)
     print("MadStory Director Validator — 导演级全套核验")
     print("=" * 70)
@@ -665,18 +682,17 @@ def run_all():
         try:
             fn()
         except Exception:
-            FAIL += 1
+            _r.failed += 1
             print(f"  [CRASH] {name}: {traceback.format_exc()}")
 
     print(f"\n{'=' * 70}")
-    total = PASS + FAIL
-    print(f"  TOTAL: {total}  |  PASS: {PASS}  |  FAIL: {FAIL}")
-    if FAIL == 0:
+    print(f"  TOTAL: {_r.total}  |  PASS: {_r.passed}  |  FAIL: {_r.failed}")
+    if _r.failed == 0:
         print("  VERDICT: 通过世界一线广告/电影导演专业核验标准")
     else:
-        print(f"  VERDICT: {FAIL} 项未通过，需修复")
+        print(f"  VERDICT: {_r.failed} 项未通过，需修复")
     print("=" * 70)
-    return FAIL
+    return _r.failed
 
 
 if __name__ == "__main__":

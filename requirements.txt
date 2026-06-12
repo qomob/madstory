@@ -1,0 +1,7 @@
+# MadStory API 依赖 (可选，仅 API 模式需要)
+# 核心引擎无外部依赖
+
+# API Server
+fastapi>=0.100.0
+uvicorn>=0.23.0
+pydantic>=2.0.0

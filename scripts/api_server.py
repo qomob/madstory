@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """MadStory REST API + WebSocket 服务 v3 — 电影级分镜设计引擎（Harness Engineering 驱动）
 支持多平台适配（Seedance / Runway / Kling / Sora），集成 PPAF 循环
-安全加固: Session TTL 30min + 请求限流 (60 req/min) + 输入过滤
+安全加固: Session TTL 30min + 请求限流 (60 req/min) + 输入过滤 + Bearer Token 认证
 """
 
 import json
 import os
+import secrets
 import sys
 import time
 import asyncio
@@ -18,7 +19,8 @@ from mad_story_engine import (
 )
 
 try:
-    from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
+    from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Depends, Security
+    from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
     from fastapi.responses import HTMLResponse
     from pydantic import BaseModel, Field
     import uvicorn
@@ -28,6 +30,20 @@ except ImportError:
 
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets")
 REFS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "references")
+
+# === 认证配置 ===
+API_TOKENS: set[str] = set(os.environ.get("MADSTORY_API_TOKENS", "").split(",")) if os.environ.get("MADSTORY_API_TOKENS") else set()
+AUTH_ENABLED = bool(API_TOKENS)
+security_scheme = HTTPBearer(auto_error=False)
+
+
+def _verify_token(credentials: HTTPAuthorizationCredentials = Security(security_scheme)):
+    """Bearer Token 认证（R.E.S.T Security: 最小权限）"""
+    if not AUTH_ENABLED:
+        return True
+    if not credentials or credentials.credentials not in API_TOKENS:
+        raise HTTPException(401, "未授权: 无效或缺失 Bearer Token")
+    return True
 
 app = FastAPI(
     title="MadStory API",
@@ -67,14 +83,14 @@ def _check_rate_limit():
 
 class GenerateRequest(BaseModel):
     mode: str = Field(..., description="创作模式", examples=["cinematic"])
-    concept: str = Field(..., description="核心创意描述")
-    timeline: str = Field(default="0-15s", description="时间轴")
-    composition: str = Field(default="center frame", description="构图方式")
-    camera: str = Field(default="static", description="镜头运动")
-    lighting: str = Field(default="default", description="光影描述")
-    sound: str = Field(default="ambient", description="声音设计")
+    concept: str = Field(..., description="核心创意描述", max_length=2000)
+    timeline: str = Field(default="0-15s", description="时间轴", max_length=500)
+    composition: str = Field(default="center frame", description="构图方式", max_length=500)
+    camera: str = Field(default="static", description="镜头运动", max_length=500)
+    lighting: str = Field(default="default", description="光影描述", max_length=500)
+    sound: str = Field(default="ambient", description="声音设计", max_length=500)
     duration: int = Field(default=15, ge=1, le=300, description="时长(秒)")
-    script: Optional[str] = Field(default=None, description="短剧剧本(仅short_drama模式)")
+    script: Optional[str] = Field(default=None, description="短剧剧本(仅short_drama模式)", max_length=50000)
 
 
 class ValidateRequest(BaseModel):
@@ -112,7 +128,7 @@ async def list_modes():
 
 
 @app.post("/generate")
-async def generate(req: GenerateRequest):
+async def generate(req: GenerateRequest, auth=Depends(_verify_token)):
     _check_rate_limit()  # 请求限流
     if req.mode not in AdMode.LABELS:
         raise HTTPException(400, f"无效模式。可选: {list(AdMode.LABELS.keys())}")
@@ -149,7 +165,7 @@ async def generate(req: GenerateRequest):
 
 
 @app.post("/validate")
-async def validate(req: ValidateRequest):
+async def validate(req: ValidateRequest, auth=Depends(_verify_token)):
     eng = MadStoryEngine(ASSETS, REFS)
     issues = eng.run_quality_gates(req.output)
     checklist = eng.run_checklist(req.output) if req.output.get("MODE_KEY") else {}
@@ -162,7 +178,7 @@ async def validate(req: ValidateRequest):
 
 
 @app.post("/session/create")
-async def session_create(req: SessionCreateRequest):
+async def session_create(req: SessionCreateRequest, auth=Depends(_verify_token)):
     _check_rate_limit()
     _cleanup_expired_sessions()  # 清理过期 Session
     if req.mode not in AdMode.LABELS:
@@ -176,7 +192,7 @@ async def session_create(req: SessionCreateRequest):
 
 
 @app.post("/session/step")
-async def session_step(req: SessionStepRequest):
+async def session_step(req: SessionStepRequest, auth=Depends(_verify_token)):
     session = active_sessions.get(req.session_id)
     if not session:
         raise HTTPException(404, "会话不存在或已过期")
@@ -189,7 +205,7 @@ async def session_step(req: SessionStepRequest):
 
 
 @app.post("/session/save")
-async def session_save(session_id: str):
+async def session_save(session_id: str, auth=Depends(_verify_token)):
     session = active_sessions.get(session_id)
     if not session:
         raise HTTPException(404, "会话不存在或已过期")
@@ -201,7 +217,7 @@ async def session_save(session_id: str):
 
 
 @app.post("/session/load")
-async def session_load(session_id: str):
+async def session_load(session_id: str, auth=Depends(_verify_token)):
     session = active_sessions.get(session_id)
     if not session:
         raise HTTPException(404, "会话不存在或已过期")
@@ -222,7 +238,7 @@ async def list_platforms():
 
 
 @app.post("/adapt")
-async def adapt_for_platform(req: GenerateRequest):
+async def adapt_for_platform(req: GenerateRequest, auth=Depends(_verify_token)):
     """将分镜输出适配到指定平台参数"""
     from platform_adapter import adapt_params, validate_for_platform
     eng = MadStoryEngine(ASSETS, REFS)

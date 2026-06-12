@@ -11,6 +11,7 @@ Platform Adapter — 多视频生成平台适配层 (Harness Engineering: REPL C
 
 from dataclasses import dataclass, field
 from typing import Optional
+from ad_mode import AdMode
 
 
 @dataclass
@@ -221,9 +222,3 @@ def validate_for_platform(output: dict, platform_id: str) -> list[str]:
 def _clamp(value: int, min_val: int, max_val: int) -> int:
     """值域裁剪（Design for Failure: 防止越界参数）"""
     return max(min_val, min(value, max_val))
-
-
-# 延迟导入避免循环依赖
-def _get_admode():
-    from mad_story_engine import AdMode
-    return AdMode

@@ -1,11 +1,11 @@
-# MadStory: 电影级影视分镜设计引擎 v3.2 (Harness Engineering Powered)
+# MadStory: 电影级影视分镜设计引擎 v3.3 (Harness Engineering Powered)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Author: qomob.ai](https://img.shields.io/badge/Author-qomob.ai-blue)](https://qomob.ai)
-[![Version: 3.2](https://img.shields.io/badge/Version-3.2.0-green.svg)](https://clawhub.ai/qomob/mad-story)
+[![Version: 3.3](https://img.shields.io/badge/Version-3.3.0-green.svg)](https://clawhub.ai/qomob/mad-story)
 [![ClawHub: mad-story](https://img.shields.io/badge/ClawHub-Install-orange)](https://clawhub.ai/qomob/mad-story)
 
-**MadStory v3.2** 是一款 **电影级影视分镜设计引擎**，融合 **Harness Engineering 工程哲学**（PPAF 循环 + R.E.S.T 可靠性模型）。支持多平台视频生成（Seedance / Runway / Kling / Sora）**及图片生成（Seedream 4.x/5.x）**，能将你模糊的电影构思，通过专业推导流程，逐步转化为包含构图、运镜、光影、声音等全维度细节的专业分镜提示词。
+**MadStory v3.3** 是一款 **电影级影视分镜设计引擎**，融合 **Harness Engineering 工程哲学**（PPAF 循环 + R.E.S.T 可靠性模型）。支持多平台视频生成（Seedance / Runway / Kling / Sora）**及图片生成（Seedream 4.x/5.x）**，能将你模糊的电影构思，通过专业推导流程，逐步转化为包含构图、运镜、光影、声音等全维度细节的专业分镜提示词。
 
 ## 核心特性 (v3.2 新增)
 
@@ -56,7 +56,7 @@
 
 ```text
 mad-story/
-├── SKILL.md                 # 技能定义 v3.2 — 双模式/分层懒加载/Harness架构
+├── SKILL.md                 # 技能定义 v3.3 — 双模式/分层懒加载/Harness架构
 ├── README.md                # 本文件
 ├── scripts/
 │   ├── mad_story_engine.py  # 核心引擎 + PPAFState/RESTCompliance/FailurePath
@@ -87,7 +87,7 @@ mad-story/
 
 ### 作为 AI Skill 触发
 在 AI 助手中输入触发词即可：
-`MadStory` / `影视分镜` / `分镜设计` / `电商视频` / `UGC广告` / `品牌短片` / `多镜头叙事` / `一镜到底` / `爆款复刻` / `短剧创作` / `从一句话出片` / `Seedream` / `文生图` / `图像编辑` / `参考图生图` / `AI绘图` / `AI生图`
+`MadStory` / `影视分镜` / `分镜设计` / `电影分镜` / `广告分镜` / `电商视频` / `UGC广告` / `品牌短片` / `多镜头叙事` / `一镜到底` / `爆款复刻` / `短剧创作` / `从一句话出片` / `AI电影` / `AI视频生成` / `Seedance` / `Seedream` / `分镜脚本` / `视频提示词` / `文生图` / `图生图` / `图像编辑` / `参考图生图` / `短剧剧本` / `微短剧` / `竖屏剧` / `AI短剧` / `短剧分镜` / `短剧编剧` / `锁脸` / `小说改短剧` / `漫剧` / `角色人设`
 
 ### CLI 命令行
 ```bash
@@ -170,7 +170,7 @@ python3 scripts/api_server.py --port 8787
 
 `director_validator.py` 内置 **271 项** 全模式核验用例，覆盖：
 
-- 输出结构完整性 (所有 8 模式)
+- 输出结构完整性 (所有 9 模式)
 - Negative Prompt 合规性扫描
 - 边界条件测试 (空输入/无效模式/全空字段)
 - 镜头运动约束强制 (单运动原则)
@@ -209,4 +209,4 @@ python3 scripts/api_server.py --port 8787
 本项目采用 [MIT License](https://opensource.org/licenses/MIT) 开源协议。
 
 ---
-**MadStory v3.2** — 电影级影视分镜设计引擎 | Harness Engineering Powered | Created by **[qomob.ai](https://qomob.ai)** | [Install on ClawHub](https://clawhub.ai/qomob/mad-story)
+**MadStory v3.3** — 电影级影视分镜设计引擎 | Harness Engineering Powered | Created by **[qomob.ai](https://qomob.ai)** | [Install on ClawHub](https://clawhub.ai/qomob/mad-story)

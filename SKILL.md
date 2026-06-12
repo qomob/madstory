@@ -1,17 +1,7 @@
 ---
 name: mad-story
-description: >-
-  电影级影视分镜设计引擎，支持多平台视频生成（Seedance / Runway / Kling / Sora）及图片生成（Seedream 4.x/5.x）。
-  支持 9 种创作模式：电影创意探索、电商产品展示、UGC 原生广告、电影感品牌短片、多镜头叙事、一镜到底、
-  爆款复刻、Agent 全链路创作、短剧批量生产。
-  融合 Harness Engineering 工程哲学（PPAF 循环 + R.E.S.T 可靠性模型），提供从一句话到专业电影级分镜提示词的完整推导流程。
-  内置多平台参数优化、Negative Prompt 自动注入、一致性管控和导演级预检。
-  支持 Seedream 4.x/5.x 图片生成：文生图、图像编辑（增删替换改）、参考图生图、多图输入/输出、知识可视化。
-  当用户提到 MadStory、影视分镜、分镜设计、电影分镜、广告分镜、电商视频、
-  UGC 广告、品牌短片、多镜头叙事、一镜到底、爆款复刻、短剧创作、从一句话出片、
-  制作短视频、AI 视频生成、生成视频提示词、抖音脚本、分镜脚本、脚本提示词、
-  Seedream、文生图、图像编辑、参考图生图、AI绘图、AI生图，或任何涉及 AI 视频/图片分镜创作的需求时，务必使用此技能。
-version: 3.2.0
+description: "电影级影视分镜设计引擎，支持视频生成(Seedance/Runway/Kling/Sora)及图片生成(Seedream 4.x/5.x)。9种创作模式含短剧全链路。触发：影视分镜/分镜设计/电影分镜/广告分镜/电商视频/UGC广告/品牌短片/多镜头叙事/一镜到底/爆款复刻/短剧创作/AI视频生成/Seedance/Seedream/文生图/图生图/图像编辑/参考图生图/短剧剧本/微短剧/竖屏剧/AI短剧/锁脸/小说改短剧/漫剧/角色人设。不适用于纯静态视觉设计或非分镜用途的通用AI绘画。"
+version: 3.3.0
 author: qomob.ai
 license: MIT
 platforms:
@@ -36,7 +26,7 @@ validator: scripts/director_validator.py
 ## 技能定位
 MadStory 是面向电影级内容生产的专业分镜设计引擎，基于 **Harness Engineering** (PPAF 循环 + R.E.S.T 可靠性模型)。同时支持 **Seedream 4.x/5.x 图片生成**（文生图、图像编辑、参考图生图、多图输入/输出、知识可视化）。
 
-- **触发词**: `MadStory`, `影视分镜`, `分镜设计`, `电影分镜`, `电商视频`, `UGC广告`, `品牌短片`, `多镜头叙事`, `一镜到底`, `爆款复刻`, `短剧创作`, `从一句话出片`, `抖音脚本`, `AI电影`, `Seedream`, `文生图`, `图像编辑`, `参考图生图`, `AI绘图`, `AI生图`
+- **触发词**: `影视分镜`, `分镜设计`, `电影分镜`, `广告分镜`, `电商视频`, `UGC广告`, `品牌短片`, `多镜头叙事`, `一镜到底`, `爆款复刻`, `短剧创作`, `从一句话出片`, `AI电影`, `AI视频生成`, `Seedance`, `Seedream`, `分镜脚本`, `视频提示词`, `文生图`, `图生图`, `图像编辑`, `参考图生图`, `短剧剧本`, `微短剧`, `竖屏剧`, `AI短剧`, `短剧分镜`, `短剧编剧`, `锁脸`, `小说改短剧`, `漫剧`, `角色人设`
 - **目标用户**: 电影导演、广告导演、创意总监、影视制作人、电商运营、品牌营销、内容创作者、短剧制作人、零基础创作者、平面设计师
 - **默认时长**: 15 秒 / 镜头（视频），图片模式无时长限制
 - **支持平台**: Seedance 2.0 / Runway / Kling / Sora (视频), Seedream 4.x/5.x (图片)
@@ -64,13 +54,14 @@ MadStory 是面向电影级内容生产的专业分镜设计引擎，基于 **Ha
 | 分镜方案输出前检查 | `references/pre_flight_checklist.md` | 导演级预检清单 |
 | 需要平台参数参考 | `references/seedance_v2_rules.md` | Seedance 2.0 提示词工程规范 |
 | 使用 Seedream 4.x/5.x 或涉及图片生成 | `references/seedream_4x_rules.md` | Seedream 4.x/5.x 文生图/图像编辑/参考图/多图规则 |
+| Mode 8 短剧 + 需要题材灵感/爆款分析 | `references/short_drama_genres.md` | 6大题材模板与10集标准结构、爆款套路 |
 
 ### Layer 2: 深度加载 (~3,000 tokens/次)
 以下资源仅在特定高级场景下加载:
 
 | 触发条件 | 加载文件/模块 | 内容 |
 |---------|-------------|------|
-| Mode 8 短剧 + 多场景/多集 | `references/short_drama_consistency.md` | 短剧全流程一致性管控 (A1-D4) |
+| Mode 8 短剧 + 多场景/多集 | `references/short_drama_consistency.md` | 短剧全流程一致性管控 + 剧本方法论 + 角色卡 + 八要素公式 + 小说改编流程 |
 | Mode 0 创意探索 | `assets/cheat_sheet.json` → `director_style_references` + `creative_film_prompts_library` | 导演风格参考 + 创意提示库 |
 | 要求电影级镜头语言 | `assets/cheat_sheet.json` → `cinematic_camera_language` + `cinematic_lighting_extended` | 运镜/构图/布光预设 |
 | 要求声音设计 | `assets/cheat_sheet.json` → `cinematic_sound_extended` | 声音分层 + 情感映射 |

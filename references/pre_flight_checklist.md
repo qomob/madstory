@@ -4,7 +4,7 @@
 
 ## 1. 技术规格 (Technical Specifications)
 
-- [ ] **Mode 已确认** — 8 个模式中选定 1 个 (ecommerce / ugc / cinematic / multi_shot / one_shot / viral_replicate / agent_mode / short_drama)
+- [ ] **Mode 已确认** — 9 个模式中选定 1 个 (creative_film / ecommerce / ugc / cinematic / multi_shot / one_shot / viral_replicate / agent_mode / short_drama)
 - [ ] **Seedance 输入模式已推荐** — Text-to-Video / Image-to-Video / Reference-to-Video 已提示用户
 - [ ] **时长已设定** — 默认 15s，多镜头序列总长 ≤ 15s，长视频可设 60s
 - [ ] **画幅比例已确定** — 16:9 / 9:16 / 1:1 / 2.35:1
