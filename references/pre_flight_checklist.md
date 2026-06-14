@@ -131,7 +131,7 @@
 - [ ] 广告视角确认 (如适用): 这个素材适合直接投放吗？
 - [ ] 即梦视角确认: 这个提示词在 Seedance 2.0 中能直接使用吗？
 - [ ] 一致性确认: 多镜头/多素材间风格统一吗？
-- [ ] Director Validator 运行通过 (python3 scripts/director_validator.py)
+- [ ] (可选) 使用独立校验工具验证: `tools/mad-story-scripts/`
 
 ## 11. Seedream 4.x/5.x 图片模式预检
 

@@ -109,7 +109,7 @@
 3. **场景空间无冲突**: 同一场景的空间布局、陈设位置、道具状态全片一致
 4. **跨时段拼接自然**: 所有拆分录制的素材拼接后，观感连贯自然
 
-**验收工具**: `python3 scripts/director_validator.py --check-consistency <episode_output.json>`
+> 验收可借助 `tools/mad-story-scripts/` 中的独立校验工具
 
 ---
 
