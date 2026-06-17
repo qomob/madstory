@@ -1,7 +1,7 @@
 ---
 name: mad-story
 description: "电影级影视分镜设计引擎，支持视频生成(Seedance/Runway/Kling/Sora)及图片生成(Seedream 4.x/5.x)。9种创作模式含短剧全链路。触发：影视分镜/分镜设计/电影分镜/广告分镜/电商视频/UGC广告/品牌短片/多镜头叙事/一镜到底/爆款复刻/短剧创作/AI视频生成/Seedance/Seedream/文生图/图生图/图像编辑/参考图生图/短剧剧本/微短剧/竖屏剧/AI短剧/锁脸/小说改短剧/漫剧/角色人设。不适用于纯静态视觉设计或非分镜用途的通用AI绘画。"
-version: 3.4.0
+version: 3.4.1
 author: qomob.ai
 license: MIT
 modes: 9
@@ -32,7 +32,7 @@ assets:
   - assets/cs_sound.json
 ---
 
-# MadStory — 电影级影视分镜设计引擎 v3.4 (分层加载架构)
+# MadStory — 电影级影视分镜设计引擎 v3.4.1 (分层加载架构)
 
 ## 技能定位
 
@@ -176,7 +176,7 @@ MadStory 是面向电影级内容生产的专业分镜设计引擎，同时支�
 
 ```text
 mad-story/
-├── SKILL.md                 # 技能定义 v3.4 — 分层加载/双模式输出
+├── SKILL.md                 # 技能定义 v3.4.1 — 分层加载/双模式输出
 ├── README.md                # 使用说明
 ├── references/
 │   ├── modes_detail.md      # 9种模式详细说明 (Layer 1)

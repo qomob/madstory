@@ -1,10 +1,15 @@
-# MadStory: 电影级影视分镜设计引擎 v3.4
+# MadStory: 电影级影视分镜设计引擎 v3.4.1
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Author: qomob.ai](https://img.shields.io/badge/Author-qomob.ai-blue)](https://qomob.ai)
-[![Version: 3.4](https://img.shields.io/badge/Version-3.4.0-green.svg)](https://clawhub.ai/qomob/mad-story)
+[![Version: 3.4.1](https://img.shields.io/badge/Version-3.4.1-green.svg)](https://clawhub.ai/qomob/mad-story)
 
-**MadStory v3.4** 是一款电影级影视分镜设计引擎，支持多平台视频生成（Seedance / Runway / Kling / Sora）及图片生成（Seedream 4.x/5.x）。能将模糊的电影构思，通过 8 阶段专业推导流程，逐步转化为包含构图、运镜、光影、声音等全维度细节的专业分镜提示词。
+**MadStory v3.4.1** 是一款电影级影视分镜设计引擎，支持多平台视频生成（Seedance / Runway / Kling / Sora）及图片生成（Seedream 4.x/5.x）。能将模糊的电影构思，通过 8 阶段专业推导流程，逐步转化为包含构图、运镜、光影、声音等全维度细节的专业分镜提示词。
+
+## v3.4.1 更新内容
+
+- **新增 焦段→情绪决策表** (`references/terminology.md`): 24/35/50/85/135mm 焦段与情绪暗示、适用 Mode 的映射，补齐摄影指导选焦段的决策依据
+- **新增 剪辑技巧库** (`assets/cheat_sheet.json` → `editing_techniques`): L-Cut / J-Cut / Jump Cut / Match Cut / Smash Cut / Montage 六种剪辑手法的提示词模板，补齐 15s 短片节奏设计的术语缺口
 
 ## 核心特性
 
@@ -47,7 +52,7 @@
 
 ```text
 mad-story/
-├── SKILL.md                 # 技能定义 v3.4 — 分层加载/双模式输出
+├── SKILL.md                 # 技能定义 v3.4.1 — 分层加载/双模式输出
 ├── README.md                # 本文件
 ├── references/
 │   ├── modes_detail.md      # 9种模式详细说明 (Layer 1)
@@ -147,4 +152,4 @@ python3 api_server.py --port 8787
 本项目采用 [MIT License](https://opensource.org/licenses/MIT) 开源协议。
 
 ---
-**MadStory v3.4** — 电影级影视分镜设计引擎 | Created by **[qomob.ai](https://qomob.ai)** | [Install on ClawHub](https://clawhub.ai/qomob/mad-story)
+**MadStory v3.4.1** — 电影级影视分镜设计引擎 | Created by **[qomob.ai](https://qomob.ai)** | [Install on ClawHub](https://clawhub.ai/qomob/mad-story)

@@ -213,6 +213,15 @@
     "auto": {"label": "AI 自动 (Auto)", "keyword": "smooth auto transition to", "duration_range": "2-3s", "best_for": "自由发挥"}
   },
 
+  "editing_techniques": {
+    "l_cut": {"label": "L-Cut (声音先于画面)", "keyword": "audio continues as visual cuts to next shot", "best_for": "对话节奏、情绪延续、回忆转场"},
+    "j_cut": {"label": "J-Cut (画面先于声音)", "keyword": "next shot's audio begins before visual appears", "best_for": "悬念预告、进入新场景、时间跳跃"},
+    "jump_cut": {"label": "Jump Cut (跳跃剪辑)", "keyword": "abrupt jump within same action, time compressed", "best_for": "时间压缩、焦虑感、UGC 快节奏"},
+    "match_cut": {"label": "Match Cut (匹配剪辑)", "keyword": "match cut via shared shape/color/motion", "best_for": "形状/颜色/动作衔接、跨时空转场"},
+    "smash_cut": {"label": "Smash Cut (强切)", "keyword": "jarring smash cut to contrasting scene", "best_for": "惊吓转场、梦境惊醒、反差冲击"},
+    "montage": {"label": "Montage (蒙太奇)", "keyword": "rapid sequence of shots compressing time/events", "best_for": "时间流逝、训练过程、事件累积"}
+  },
+
   "viral_replicate_strategies": {
     "creative_shoot": {"label": "创意拍摄复刻", "pattern": "参考[@视频]运镜，主体更换为[@图片]"},
     "classic_remake": {"label": "经典影视还原", "pattern": "复刻[@视频]细节，人物替换成[角色]"},
