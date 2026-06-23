@@ -147,6 +147,14 @@ python3 api_server.py --port 8787
 }
 ```
 
+# 加入群聊
+
+<div align="center">
+  <img src="https://qomob.ai/xskill.jpg" width="600" alt="XSkill">
+</div>
+
+---
+
 ## 许可证
 
 本项目采用 [MIT License](https://opensource.org/licenses/MIT) 开源协议。
