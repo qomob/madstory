@@ -1,7 +1,7 @@
 ---
 name: mad-story
 description: "电影级影视分镜设计引擎，支持视频生成(Seedance/Runway/Kling/Sora)及图片生成(Seedream 4.x/5.x)。9种创作模式含短剧全链路。触发：影视分镜/分镜设计/电影分镜/广告分镜/电商视频/UGC广告/品牌短片/多镜头叙事/一镜到底/爆款复刻/短剧创作/AI视频生成/Seedance/Seedream/文生图/图生图/图像编辑/参考图生图/短剧剧本/微短剧/竖屏剧/AI短剧/锁脸/小说改短剧/漫剧/角色人设。不适用于纯静态视觉设计或非分镜用途的通用AI绘画。"
-version: 3.4.1
+version: 3.5.0
 author: qomob.ai
 license: MIT
 modes: 9
@@ -32,7 +32,7 @@ assets:
   - assets/cs_sound.json
 ---
 
-# MadStory — 电影级影视分镜设计引擎 v3.4.1 (分层加载架构)
+# MadStory — 电影级影视分镜设计引擎 v3.5.0 (分层加载架构)
 
 ## 技能定位
 
@@ -46,6 +46,20 @@ MadStory 是面向电影级内容生产的专业分镜设计引擎，同时支�
 ## 分层加载架构 (Progressive Loading)
 
 > **核心原则**: SKILL.md 始终加载。其他资源按交互阶段按需加载。
+
+## 模式状态看板（启发）
+
+> 9 种创作模式并行或串行执行时，用户需要看到每个模式的状态——哪个在推导、哪个在生成、哪个已完成。
+
+```
+🎬 分镜状态看板
+├── [Mode 选择]        ✅ 已完成 — {模式名}
+├── [Phase 0-7]        🟡 推导中 — 当前 Phase {N}
+├── [提示词生成]       🔵 等待中
+└── [Pre-flight 预检]  🔵 等待中
+```
+
+多模式串行（如短剧全链路：剧本→分镜→提示词→生成）时，看板展示每个阶段的独立状态。用户可随时说"看板"查看当前进度。
 
 ### Layer 0: 始终加载 (本文件)
 - 元数据 + 触发词 + 技能定位
@@ -63,7 +77,7 @@ MadStory 是面向电影级内容生产的专业分镜设计引擎，同时支�
 | 进入 Phase N 推导 | `references/phases_detail.md` | Phase N 的详细推导指引 |
 | 生成/校验提示词 | `references/prompt_engineering.md` | 5层结构、Negative Prompt模板、多镜头/一镜到底/复刻语法 |
 | 需要精确镜头术语 | `references/terminology.md` | 影视专业术语库 |
-| 分镜方案输出前检查 | `references/pre_flight_checklist.md` | 导演级预检清单 |
+| 分镜方案输出前检查 | `references/pre_flight_checklist.md` | 导演级预检清单 + **元反思（8 维度推演过程自检）** |
 | 需要平台参数参考 | `references/seedance_v2_rules.md` | Seedance 2.0 提示词工程规范 |
 | 使用 Seedream 4.x/5.x 或涉及图片生成 | `references/seedream_4x_rules.md` | Seedream 4.x/5.x 文生图/图像编辑/参考图/多图规则 |
 | 短剧 + 需要题材灵感/爆款分析 | `references/short_drama_genres.md` | 6大题材模板与10集标准结构、爆款套路 |
@@ -185,7 +199,7 @@ mad-story/
 │   ├── seedance_v2_rules.md # Seedance 2.0 提示词工程规范 (Layer 1)
 │   ├── seedream_4x_rules.md # Seedream 4.x/5.x 图片生成规范 (Layer 1)
 │   ├── terminology.md       # 影视分镜专业术语库 (Layer 1)
-│   ├── pre_flight_checklist.md # 导演级预检清单 (Layer 1)
+│   ├── pre_flight_checklist.md # 导演级预检清单 + 元反思（8 维度） (Layer 1)
 │   ├── short_drama_consistency.md # 短剧全流程一致性管控 (Layer 2)
 │   ├── short_drama_genres.md # 短剧6大题材模板 (Layer 1)
 │   └── examples/

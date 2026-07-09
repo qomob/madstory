@@ -1,15 +1,14 @@
-# MadStory: 电影级影视分镜设计引擎 v3.4.1
+# MadStory: 电影级影视分镜设计引擎 v3.5.0
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Author: qomob.ai](https://img.shields.io/badge/Author-qomob.ai-blue)](https://qomob.ai)
-[![Version: 3.4.1](https://img.shields.io/badge/Version-3.4.1-green.svg)](https://clawhub.ai/qomob/mad-story)
+[![Version: 3.5.0](https://img.shields.io/badge/Version-3.5.0-green.svg)](https://clawhub.ai/qomob/mad-story)
 
-**MadStory v3.4.1** 是一款电影级影视分镜设计引擎，支持多平台视频生成（Seedance / Runway / Kling / Sora）及图片生成（Seedream 4.x/5.x）。能将模糊的电影构思，通过 8 阶段专业推导流程，逐步转化为包含构图、运镜、光影、声音等全维度细节的专业分镜提示词。
+**MadStory v3.5.0** 是一款电影级影视分镜设计引擎，支持多平台视频生成（Seedance / Runway / Kling / Sora）及图片生成（Seedream 4.x/5.x）。能将模糊的电影构思，通过 8 阶段专业推导流程，逐步转化为包含构图、运镜、光影、声音等全维度细节的专业分镜提示词。
 
-## v3.4.1 更新内容
+## v3.5.0 更新内容
 
-- **新增 焦段→情绪决策表** (`references/terminology.md`): 24/35/50/85/135mm 焦段与情绪暗示、适用 Mode 的映射，补齐摄影指导选焦段的决策依据
-- **新增 剪辑技巧库** (`assets/cheat_sheet.json` → `editing_techniques`): L-Cut / J-Cut / Jump Cut / Match Cut / Smash Cut / Montage 六种剪辑手法的提示词模板，补齐 15s 短片节奏设计的术语缺口
+- **新增 元反思（Meta-Reflection）**: 导演级预检清单新增第 12 项「元反思 — 推演过程自检」——跳出"检查方案"视角，从问题定义/假设/推理/证据/替代解释/边界条件/目标/不确定性 8 个维度审视整个创作推演过程是否站得住脚，附 10 条硬约束强制执行
 
 ## 核心特性
 
@@ -17,6 +16,7 @@
 - **8 阶段推导流程 (Phase 0-7)**: 从模式选择到最终合成，逐阶段引导
 - **双模式输出**: 视频模式（5层提示词结构 + Negative Prompt）与图片模式（3层结构 + 文字渲染 + 图像编辑语法）独立定义
 - **双模式质量门禁**: 视频模式与图片模式分别定义不合格判定条件
+- **元反思**: 导演级预检清单第 12 项——交付前 8 维度推演过程自检（问题定义/假设/推理/证据/替代解释/边界条件/目标/不确定性）+ 10 条硬约束
 - **分层加载架构**: SKILL.md 始终加载，参考文献按交互阶段按需加载
 - **短剧一致性管控**: 角色档案 + 场景清单 + 时间线轴 + 四阶段验收
 - **电影级数据资产**: 导演风格参考 / 镜头语言 / 光影预设 / 声音设计 / 叙事结构
@@ -52,7 +52,7 @@
 
 ```text
 mad-story/
-├── SKILL.md                 # 技能定义 v3.4.1 — 分层加载/双模式输出
+├── SKILL.md                 # 技能定义 v3.5.0 — 分层加载/双模式输出
 ├── README.md                # 本文件
 ├── references/
 │   ├── modes_detail.md      # 9种模式详细说明 (Layer 1)
@@ -61,7 +61,7 @@ mad-story/
 │   ├── seedance_v2_rules.md # Seedance 2.0 提示词工程规范 (Layer 1)
 │   ├── seedream_4x_rules.md # Seedream 4.x/5.x 图片生成规范 (Layer 1)
 │   ├── terminology.md       # 影视分镜专业术语库 (Layer 1)
-│   ├── pre_flight_checklist.md # 导演级预检清单 (Layer 1)
+│   ├── pre_flight_checklist.md # 导演级预检清单 + 元反思（8 维度） (Layer 1)
 │   ├── short_drama_consistency.md # 短剧全流程一致性管控 (Layer 2)
 │   ├── short_drama_genres.md # 短剧6大题材模板 (Layer 1)
 │   └── examples/
@@ -160,4 +160,4 @@ python3 api_server.py --port 8787
 本项目采用 [MIT License](https://opensource.org/licenses/MIT) 开源协议。
 
 ---
-**MadStory v3.4.1** — 电影级影视分镜设计引擎 | Created by **[qomob.ai](https://qomob.ai)** | [Install on ClawHub](https://clawhub.ai/qomob/mad-story)
+**MadStory v3.5.0** — 电影级影视分镜设计引擎 | Created by **[qomob.ai](https://qomob.ai)** | [Install on ClawHub](https://clawhub.ai/qomob/mad-story)
