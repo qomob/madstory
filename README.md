@@ -1,12 +1,12 @@
-# MadStory: 电影级影视分镜设计引擎 v3.6.0
+# MadStory: 电影级影视分镜设计引擎 v3.7.0
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Author: qomob.ai](https://img.shields.io/badge/Author-qomob.ai-blue)](https://qomob.ai)
-[![Version: 3.6.0](https://img.shields.io/badge/Version-3.6.0-green.svg)](https://clawhub.ai/qomob/mad-story)
+[![Version: 3.7.0](https://img.shields.io/badge/Version-3.7.0-green.svg)](https://clawhub.ai/qomob/mad-story)
 
 **MadStory** 是一款电影级影视分镜设计引擎。它将模糊的创作意图，通过 9 阶段专业推导流程，逐步转化为包含构图、运镜、光影、表演调度、声音设计等全维度细节的专业分镜提示词。
 
-- **原生平台**: Seedance 2.0 (视频) + Seedream 4.x/5.x (图片)
+- **原生平台**: Seedance 2.0 (视频) + Seedream 4.x/5.x/5.0 Pro (图片)
 - **兼容输出**: Runway / Kling / Sora（参数需用户自行适配）
 
 ## 与其他 AI 分镜工具的区别
@@ -18,6 +18,12 @@
 | **学习能力** | 静态知识库 | DEFECT_LOG 反馈回路——从每次生成结果中持续优化 |
 | **平台诚实** | "支持所有平台" | 原生 vs 兼容分层声明 + 规则版本锁定 |
 | **模型限制** | 隐藏缺陷 | 公开声明 5 类已知限制及对策 |
+
+## v3.7.0 更新内容
+
+- **新增 Seedream 5.0 Pro 全部专属能力**: 交互式精准编辑（坐标/框选/标注框）、高密度信息呈现、原生多语种文字渲染、影视感自动增强、人像质感（毛孔级）、Visual CoT 空间推理、多轮对话式编辑、PNG 透明背景输出
+- **新增 版本能力对照速查表**: 4.0/4.5/5.0 Lite/5.0 Pro 四版本 14 项能力对比矩阵
+- **优化 seedream_4x_rules.md**: 从覆盖 4.0-5.0 Lite 扩展为 4.0-5.0 Pro，新增 §8.5（8 个 Pro 专属子章节）+ §9（版本对照表）+ §10.8（Pro 专属示例）
 
 ## v3.6.0 更新内容
 
@@ -98,7 +104,7 @@ mad-story/
 │   ├── phases_detail.md     # Phase 0-7(+3.5) 推导指引 + AI可执行性标注
 │   ├── prompt_engineering.md # 提示词结构索引（指向 seedance_v2_rules.md）
 │   ├── seedance_v2_rules.md # Seedance 2.0 完整提示词工程规范
-│   ├── seedream_4x_rules.md # Seedream 4.x/5.x 图片生成规范
+│   ├── seedream_4x_rules.md # Seedream 4.x-5.0 Pro 图片生成规范（含 5.0 Pro 专属能力）
 │   ├── terminology.md       # 影视分镜专业术语库
 │   ├── pre_flight_checklist.md # 导演级预检清单 + 元反思（8 维度）
 │   ├── short_drama_consistency.md # 短剧全流程一致性管控 (Stage A-H)

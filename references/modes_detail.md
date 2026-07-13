@@ -9,6 +9,7 @@
 - **核心能力**: 风格混搭建议、意外转场推荐、情绪反差提案、视觉隐喻生成、导演视角切换
 - **Harness 机制**: 采用 **Generate-and-Filter + Tournament** 模式——先生成多个创意方向，再通过评分矩阵筛选最优方案
 - **默认模式**: Text-to-Video
+- **Seedream 5.0 Pro 增强**: 图片模式下可利用影视感自动增强和人像质感提升，在概念探索阶段直接生成接近最终质量的电影级静帧。使用 `cinematic portrait, shallow depth of field` 等修饰词激活
 - **关键护栏**: `no generic composition, no cliché visual language, no random style mixing, no emotional disconnect, no flat narrative, no derivative imagery`
 - **工作流**:
   1. **Perception (感知)**: 解析用户模糊意图，提取情绪关键词和参考意象
@@ -34,6 +35,7 @@
 - **场景**: 商品详情页视频、主图动效、PDP 循环、付费社交素材
 - **核心要求**: 产品几何不变形、标签可读、镜头运动克制
 - **默认模式**: Image-to-Video
+- **Seedream 5.0 Pro 增强**: 支持坐标级精准编辑（框选产品局部修改材质/颜色）；PNG 透明背景输出直接用于电商主图；高密度信息呈现适合复杂产品参数图
 - **关键护栏**: `no label blur, no packaging warp, no logo distortion, no duplicate product`
 - **镜头策略**: 单动作、单机位、产品占画幅 > 40%
 
@@ -41,6 +43,7 @@
 - **场景**: 信息流投放素材、创作者口播、种草测评
 - **核心要求**: 面部一致、手势自然、节奏"社交感"、产品不消失
 - **默认模式**: Reference-to-Video
+- **Seedream 5.0 Pro 增强**: 人像质感提升（毛孔级皮肤纹理+自然眼神光）让 UGC 创作者形象更真实可信；多轮对话式编辑可逐步精修（先换背景→再改服装→再调光影）
 - **关键护栏**: `no face drift, no extra fingers, no lip mismatch, no product disappearance, no shaky framing`
 - **镜头策略**: 单人、单信息点、保留原生感（不要过度电影化）
 
@@ -106,6 +109,7 @@
 
 ## Mode 8: 短剧创作 (Short Drama)
 - **场景**: AI 短剧全自动生产、漫剧创作、小说改编短剧
+- **Seedream 5.0 Pro 增强**: 多轮对话式编辑非常适合短剧角色卡迭代（同一角色不同场景/服装/表情）；人像质感提升让角色立绘达到商业级；多语种文字渲染支持国际化字幕
 - **工作流关系（重要）**: Mode 8 采用 **Stage A-H 为主线**，Phase 0-7 作为每段戏份的镜头级推导子流程嵌入其中。具体映射：
   - Stage E（剧本设计）→ 产出每集的镜头清单
   - Stage F（角色卡）→ 为 Phase 1（核心创意锁定）提供角色外观输入
